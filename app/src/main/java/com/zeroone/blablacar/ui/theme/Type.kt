@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.theme
+package com.zeroone.blablacar.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
