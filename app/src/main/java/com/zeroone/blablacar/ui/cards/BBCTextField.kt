@@ -49,6 +49,7 @@ fun BBCTextField(
                 }
             }
         },
+        shape= MaterialTheme.shapes.small,
         modifier = modifier
             .fillMaxWidth()
             .paddingFromBaseline(bottom = 32.dp),

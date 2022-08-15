@@ -43,6 +43,30 @@
     <string name="contact"> Contact </string>
 
 
+    <string name="person"> Person </string>
+    <string name="location"> Location </string>
+    <string name="location_and_date"> Location &amp; Date</string>
+    <string name="from"> From </string>
+    <string name="to"> To </string>
+    <string name="date"> Date </string>
+    <string name="time"> Time </string>
+    <string name="max"> Max </string>
+    <string name="no_smoking"> No smoking in the car </string>
+    <string name="pet_allowed"> Pets allowed </string>
+    <string name="car"> Car </string>
+    <string name="about"> About </string>
+    <string name="drive"> Drive </string>
+    <string name="polite"> Polite </string>
+    <string name="general"> General </string>
+    <string name="rate"> Rate </string>
+    <string name="age"> Age </string>
+    <string name="gender"> Gender </string>
+    <string name="payment"> Payment </string>
+    <string name="one_person_price"> Total price for 1 person </string>
+    <string name="book"> Book </string>
+    <string name="empty_seat"> empty seat </string>
+
+
 
 
     <string name="lorem"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet consequatur minus, necessitatibus nihil non nostrum officiis pariatur perspiciatis qui quia repellat repudiandae sunt vel velit? Accusamus, cupiditate nulla? Expedita. </string>
