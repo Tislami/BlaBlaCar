@@ -1,24 +1,14 @@
-package com.zeroone.blablacar.presentation.screens.post.cards
+package com.zeroone.blablacar.presentation.screens.post.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.Car
-import com.zeroone.blablacar.domain.model.Post
 import com.zeroone.blablacar.ui.cards.*
 
 

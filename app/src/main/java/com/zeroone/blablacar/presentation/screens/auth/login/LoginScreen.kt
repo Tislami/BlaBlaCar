@@ -33,10 +33,9 @@ private fun Content() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(text = stringResource(id = R.string.sing_in))
+        Text(text = stringResource(id = R.string.sing_in)) // TODO: Change logo
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         //______Text Fields ______
         BBCTextField(

@@ -9,14 +9,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BBCCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    contentColor : Color = MaterialTheme.colors.onSurface,
+    backgroundColor : Color=  MaterialTheme.colors.surface,
     content: @Composable () -> Unit,
-) {
+    ) {
     Card(
         modifier = modifier
             .padding(vertical = 4.dp)
@@ -27,8 +30,8 @@ fun BBCCard(
                 spotColor = MaterialTheme.colors.primary
             )
             .clickable { onClick() },
-        contentColor = MaterialTheme.colors.onSurface,
-        backgroundColor = MaterialTheme.colors.surface,
+        contentColor = contentColor,
+        backgroundColor = backgroundColor,
         content = content
     )
 }

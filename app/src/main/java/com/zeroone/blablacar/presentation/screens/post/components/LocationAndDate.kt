@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.post.cards
+package com.zeroone.blablacar.presentation.screens.post.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider

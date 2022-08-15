@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.post.components
+package com.zeroone.blablacar.presentation.screens.post.cards
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
