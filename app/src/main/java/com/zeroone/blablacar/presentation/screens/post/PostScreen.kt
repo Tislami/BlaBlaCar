@@ -9,12 +9,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.zeroone.blablacar.domain.model.Post
 import com.zeroone.blablacar.presentation.screens.post.components.*
 import com.zeroone.blablacar.ui.cards.*
 
 @Composable
-fun PostScreen(post: Post) {
+fun PostScreen(navController: NavHostController,post: Post) {
+
+
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)

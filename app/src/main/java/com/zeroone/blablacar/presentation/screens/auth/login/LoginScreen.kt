@@ -10,22 +10,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.zeroone.blablacar.R
+import com.zeroone.blablacar.presentation.screens.Screens
 import com.zeroone.blablacar.ui.cards.BBCButton
 import com.zeroone.blablacar.ui.cards.BBCText
 import com.zeroone.blablacar.ui.cards.BBCTextButton
 import com.zeroone.blablacar.ui.cards.BBCTextField
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
+    Content(navController)
 
-    Scaffold(
-        content = { Content() },
-    )
 }
 
 @Composable
-private fun Content() {
+private fun Content(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +60,7 @@ private fun Content() {
                 .fillMaxWidth()
                 .height(50.dp),
             text = stringResource(id = R.string.sing_in),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Screens.Home.route) },
         )
 
 
@@ -99,7 +99,9 @@ private fun Content() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             BBCText(text = stringResource(id = R.string.dont_have_an_account))
-            BBCTextButton(text = stringResource(id = R.string.sing_up)){}
+            BBCTextButton(text = stringResource(id = R.string.sing_up)){
+                navController.navigate(Screens.Registration.route)
+            }
         }
     }
 }

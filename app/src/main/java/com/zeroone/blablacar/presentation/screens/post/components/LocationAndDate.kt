@@ -74,7 +74,7 @@ private fun DateAndTime(post: Post) {
 }
 
 @Composable
-public fun LocationAndDate(post: Post) {
+fun LocationAndDate(post: Post) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         BBCText(
             text = stringResource(id = R.string.location_and_date),
