@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.ui.theme
+package com.zeroone.blablacar.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.Post
-import com.zeroone.blablacar.ui.cards.BBCImage
-import com.zeroone.blablacar.ui.cards.BBCPostText
-import com.zeroone.blablacar.ui.cards.BBCText
+import com.zeroone.blablacar.presentation.ui.cards.BBCImage
+import com.zeroone.blablacar.presentation.ui.cards.BBCPostText
+import com.zeroone.blablacar.presentation.ui.cards.BBCText
 
 @Composable
 private fun Location(post: Post) {

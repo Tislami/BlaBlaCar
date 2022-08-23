@@ -15,12 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.Post
-import com.zeroone.blablacar.ui.cards.*
+import com.zeroone.blablacar.presentation.ui.cards.*
 
 @Composable
-fun Post(post: Post, onClick: () -> Unit) {
-    BBCCard(onClick = onClick) {
-        Row(modifier = Modifier
+fun Post(modifier: Modifier=Modifier,post: Post) {
+
+    BBCCard{
+
+        Row(modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 8.dp, vertical = 8.dp)
         ) {

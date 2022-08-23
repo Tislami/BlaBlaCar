@@ -1,63 +1,74 @@
 package com.zeroone.blablacar.presentation.screens
 
 import android.util.Log
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.zeroone.blablacar.domain.model.defaultPost
-import com.zeroone.blablacar.presentation.screens.auth.login.LoginScreen
-import com.zeroone.blablacar.presentation.screens.auth.login.LoginTopAppBar
-import com.zeroone.blablacar.presentation.screens.auth.registration.RegistrationScreen
-import com.zeroone.blablacar.presentation.screens.auth.registration.RegistrationTopAppBar
-import com.zeroone.blablacar.presentation.screens.home.HomeScreen
-import com.zeroone.blablacar.presentation.screens.home.HomeTopAppBar
-import com.zeroone.blablacar.presentation.screens.post.PostScreen
-import com.zeroone.blablacar.presentation.screens.post.PostTopAppBar
+import com.zeroone.blablacar.presentation.BBCState
+import com.zeroone.blablacar.presentation.screens.auth.login.navigation.loginGraph
+import com.zeroone.blablacar.presentation.screens.auth.registration.navigation.registrationGraph
+import com.zeroone.blablacar.presentation.screens.home.navigation.homeGraph
+import com.zeroone.blablacar.presentation.screens.post.navigation.postGraph
+import com.zeroone.blablacar.presentation.screens.user.profile.navigation.profileGraph
+import com.zeroone.blablacar.utils.TAG
+
 
 @Composable
 fun BBCNavigation() {
 
-    val contentNavController = rememberNavController()
+    val bbcState = BBCState(
+        navController = rememberNavController(),
+        scaffoldState = rememberScaffoldState(),
+        coroutineScope = rememberCoroutineScope(),
+    )
 
-    val scaffoldState = rememberScaffoldState()
-
+    Log.d(TAG, "BBCNavigation: ")
     Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            Log.d("Bars","TopBar ") },
-        content = { NavHostContentController(contentNavController)
-            Log.d("Bars","Content")
-
+        scaffoldState = bbcState.scaffoldState,
+        content = {
+            Log.d(TAG, "BBCNavigation: Content")
+            NavHostController(modifier = Modifier.padding(it), bbcState)
         },
-        bottomBar = {
-            Log.d("Bars","BottomBar")
-
-        }
     )
 
 }
 
+
 @Composable
-private fun NavHostContentController(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screens.Registration.route) {
-        composable(route = Screens.Registration.route) { RegistrationScreen(navController) }
-        composable(route = Screens.Login.route) { LoginScreen(navController) }
-        composable(route = Screens.Home.route) { HomeScreen(navController) }
+private fun NavHostController(
+    modifier: Modifier = Modifier,
+    bbcState: BBCState
+) {
+    NavHost(
+        navController = bbcState.navController,
+        startDestination = Screen.Registration.route,
+        modifier = modifier
+    ) {
 
-        composable(
-            route = Screens.Post.route + "/{id}",
-            arguments = listOf(navArgument(name = "id") {
-                type = NavType.IntType
-                defaultValue = 0
-            })
-        ) {
+        registrationGraph(
+            navigateToHome = { bbcState.navigateTo(Screen.Home.route) },
+            navigateToSignIn = { bbcState.navigateTo(Screen.Login.route) },
+            googleOnClick = { bbcState.showSnackbar("Google") },
+            fbOnClick = { bbcState.showSnackbar("FB") },
+        )
 
-            PostScreen(navController = navController, defaultPost) }
+        loginGraph(
+            navigateToHome = { bbcState.navigateTo(Screen.Home.route) },
+            navigateToSignUp = { bbcState.navigateTo(Screen.Registration.route) },
+            googleOnClick = { bbcState.showSnackbar("Google") },
+            fbOnClick = { bbcState.showSnackbar("FB") },
+        )
+        homeGraph(
+            backOnClick = { bbcState.navigateTo(Screen.Registration.route) },
+            postClick = {
+                Log.d(TAG, "NavHostController: cliked $it")
+                bbcState.navigateTo(Screen.Post.route + "/$it")
+            }
+        )
+        profileGraph()
+        postGraph()
     }
 }

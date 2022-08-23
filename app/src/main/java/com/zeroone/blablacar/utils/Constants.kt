@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import java.util.*
 
+const val TAG : String = "BBCApp"
 const val NAME = "BlaBlaCar"
 
 val MONTH = mutableListOf<String>(

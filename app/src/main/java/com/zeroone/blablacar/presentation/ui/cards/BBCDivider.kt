@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.ui.cards
+package com.zeroone.blablacar.presentation.ui.cards
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider

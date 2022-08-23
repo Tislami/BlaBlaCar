@@ -12,10 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.zeroone.blablacar.ui.cards.BBCCard
-import com.zeroone.blablacar.ui.cards.BBCText
-import com.zeroone.blablacar.ui.cards.BBCTextField
-import com.zeroone.blablacar.utils.rememberDatePicker
+import com.zeroone.blablacar.presentation.ui.cards.BBCCard
+import com.zeroone.blablacar.presentation.ui.cards.BBCText
+import com.zeroone.blablacar.presentation.ui.cards.BBCTextField
 
 @Composable
 fun Search() {
@@ -40,7 +39,7 @@ fun Search() {
             ) {
                 Date()
 
-                BBCCard(onClick = {}) {
+                BBCCard{
                     Row(
                         modifier = Modifier
                             .background(MaterialTheme.colors.primary)
@@ -62,7 +61,7 @@ fun Search() {
 @Composable
 private fun Date() {
 
-    BBCCard(onClick = { }) {
+    BBCCard{
         Row(
             modifier = Modifier
                 .background(MaterialTheme.colors.primary)

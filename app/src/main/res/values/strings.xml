@@ -42,7 +42,7 @@
     <string name="unfollow"> Unfollow </string>
     <string name="contact"> Contact </string>
 
-
+    //Post
     <string name="person"> Person </string>
     <string name="location"> Location </string>
     <string name="location_and_date"> Location &amp; Date</string>
@@ -65,6 +65,11 @@
     <string name="one_person_price"> Total price for 1 person </string>
     <string name="book"> Book </string>
     <string name="empty_seat"> empty seat </string>
+
+    //BottomBar
+    <string name="home"> Home </string>
+    <string name="add"> Add </string>
+    <string name="profile"> Profile </string>
 
 
 

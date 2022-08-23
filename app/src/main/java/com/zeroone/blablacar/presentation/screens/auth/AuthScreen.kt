@@ -2,18 +2,13 @@ package com.zeroone.blablacar.presentation.screens.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.ui.cards.BBCButton
-import com.zeroone.blablacar.ui.cards.BBCText
-import com.zeroone.blablacar.ui.cards.BBCTextButton
-import com.zeroone.blablacar.ui.cards.BBCTextField
+import com.zeroone.blablacar.presentation.ui.cards.BBCButton
 
 @Composable
 fun AuthScreen() {

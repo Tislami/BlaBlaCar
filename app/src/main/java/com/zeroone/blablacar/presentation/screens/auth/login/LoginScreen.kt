@@ -1,5 +1,6 @@
 package com.zeroone.blablacar.presentation.screens.auth.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,101 +11,91 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.presentation.screens.Screens
-import com.zeroone.blablacar.ui.cards.BBCButton
-import com.zeroone.blablacar.ui.cards.BBCText
-import com.zeroone.blablacar.ui.cards.BBCTextButton
-import com.zeroone.blablacar.ui.cards.BBCTextField
+import com.zeroone.blablacar.presentation.rememberBBCState
+import com.zeroone.blablacar.presentation.screens.BBCTopAppBar
+import com.zeroone.blablacar.presentation.screens.LoginTopAppBar
+import com.zeroone.blablacar.presentation.screens.Screen
+import com.zeroone.blablacar.presentation.screens.auth.AuthLogo
+import com.zeroone.blablacar.presentation.screens.auth.AuthWithSocialMedia
+import com.zeroone.blablacar.presentation.screens.auth.HaveAccount
+import com.zeroone.blablacar.presentation.ui.cards.BBCButton
+import com.zeroone.blablacar.presentation.ui.cards.BBCTextField
+import com.zeroone.blablacar.utils.TAG
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
-    Content(navController)
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit,
+    googleOnClick: () -> Unit,
+    fbOnClick: () -> Unit,
+) {
 
-}
+    Log.d(TAG, "LoginScreen: ")
 
-@Composable
-private fun Content(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 128.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-
-        Text(text = stringResource(id = R.string.sing_in)) // TODO: Change logo
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        //______Text Fields ______
-        BBCTextField(
-            text = "",
-            onValueChange = {},
-            hint = stringResource(id = R.string.e_mail),
-            leadingIcon = Icons.Default.Email,
-            trailingIcon = Icons.Default.Clear,
-        )
-
-        BBCTextField(
-            text = "",
-            onValueChange = {},
-            hint = stringResource(id = R.string.password),
-            leadingIcon = Icons.Default.Lock,
-            trailingIcon = Icons.Default.Close,
-        )
-
-
-        BBCButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            text = stringResource(id = R.string.sing_in),
-            onClick = { navController.navigate(Screens.Home.route) },
-        )
-
-
-        //______OR______
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.paddingFromBaseline(top = 32.dp)
+    Scaffold(
+        topBar = { LoginTopAppBar()},
         ) {
-            Divider(modifier = Modifier.weight(1f))
-            BBCText(text = stringResource(id = R.string.or))
-            Divider(modifier = Modifier.weight(1f))
-        }
-
-        BBCButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            text = stringResource(id = R.string.sing_in_with_google),
-            onClick = { /*TODO*/ },
-        )
-
-        BBCButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            text = stringResource(id = R.string.sing_in_with_facebook),
-            onClick = { /*TODO*/ },
-        )
-
-
-        //______Have Account ______
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            BBCText(text = stringResource(id = R.string.dont_have_an_account))
-            BBCTextButton(text = stringResource(id = R.string.sing_up)){
-                navController.navigate(Screens.Registration.route)
-            }
+
+            AuthLogo(resourceId = R.string.sing_in) // TODO: Change logo
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SingIn(navigateToHome = navigateToHome)
+
+            AuthWithSocialMedia(
+                googleOnClick = googleOnClick,
+                fbOnClick = fbOnClick
+            )
+
+            HaveAccount(
+                mainTextResourceId = R.string.dont_have_an_account,
+                buttonTextResourceId = R.string.sing_in,
+                onClick = navigateToSignUp
+            )
         }
     }
 }
+
+
+@Composable
+private fun SingIn(navigateToHome: () -> Unit) {
+    BBCTextField(
+        text = "",
+        onValueChange = {},
+        hint = stringResource(id = R.string.e_mail),
+        leadingIcon = Icons.Default.Email,
+        trailingIcon = Icons.Default.Clear,
+    )
+
+    BBCTextField(
+        text = "",
+        onValueChange = {},
+        hint = stringResource(id = R.string.password),
+        leadingIcon = Icons.Default.Lock,
+        trailingIcon = Icons.Default.Close,
+    )
+
+
+    BBCButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        text = stringResource(id = R.string.sing_in),
+        onClick = { navigateToHome() },
+    )
+}
+
+
 
 
 
