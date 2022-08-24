@@ -1,13 +1,14 @@
 package com.zeroone.blablacar.presentation.screens.auth.registration.navigation
 
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.zeroone.blablacar.presentation.screens.Screen
+import com.google.accompanist.navigation.animation.composable
+import com.zeroone.blablacar.presentation.screens.main.Screen
 import com.zeroone.blablacar.presentation.screens.auth.registration.RegistrationScreen
-import com.zeroone.blablacar.utils.TAG
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.registrationGraph(
     modifier: Modifier = Modifier,
     navigateToSignIn: ()->Unit,
@@ -15,7 +16,7 @@ fun NavGraphBuilder.registrationGraph(
     googleOnClick: () -> Unit,
     fbOnClick: () -> Unit,
 ) {
-    Log.d(TAG, "registrationGraph: ")
+    Log.d("Graph", "registrationGraph: ")
     composable(route = Screen.Registration.route) {
         RegistrationScreen(
             modifier= modifier,

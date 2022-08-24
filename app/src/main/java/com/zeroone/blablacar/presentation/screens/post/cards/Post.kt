@@ -21,14 +21,8 @@ import com.zeroone.blablacar.presentation.ui.cards.*
 fun Post(modifier: Modifier=Modifier,post: Post) {
 
     BBCCard{
-
-        Row(modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 8.dp, vertical = 8.dp)
-        ) {
-
-            Column(
-                modifier = Modifier.fillMaxSize(),
+        Column(
+            modifier = modifier.padding(8.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Location(post)
@@ -42,7 +36,7 @@ fun Post(modifier: Modifier=Modifier,post: Post) {
                 PersonAndPrice(post)
             }
         }
-    }
+
 }
 
 @Composable

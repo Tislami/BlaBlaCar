@@ -8,6 +8,6 @@ import com.zeroone.blablacar.utils.TAG
 @Composable
 fun EditProfileScreen() {
 
-    Log.d(TAG, "EditProfileScreen: ")
+    Log.d("Screen", "EditProfileScreen: ")
     Text(text = "EditProfile")
 }

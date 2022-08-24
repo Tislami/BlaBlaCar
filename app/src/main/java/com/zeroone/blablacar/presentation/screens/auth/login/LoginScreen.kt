@@ -2,7 +2,6 @@ package com.zeroone.blablacar.presentation.screens.auth.login
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -10,59 +9,62 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.presentation.rememberBBCState
-import com.zeroone.blablacar.presentation.screens.BBCTopAppBar
-import com.zeroone.blablacar.presentation.screens.LoginTopAppBar
-import com.zeroone.blablacar.presentation.screens.Screen
 import com.zeroone.blablacar.presentation.screens.auth.AuthLogo
 import com.zeroone.blablacar.presentation.screens.auth.AuthWithSocialMedia
 import com.zeroone.blablacar.presentation.screens.auth.HaveAccount
 import com.zeroone.blablacar.presentation.ui.cards.BBCButton
 import com.zeroone.blablacar.presentation.ui.cards.BBCTextField
 import com.zeroone.blablacar.utils.TAG
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     navigateToSignUp: () -> Unit,
     navigateToHome: () -> Unit,
     googleOnClick: () -> Unit,
     fbOnClick: () -> Unit,
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
 ) {
 
-    Log.d(TAG, "LoginScreen: ")
+    Log.d("Screen", "LoginScreen: ")
 
-    Scaffold(
-        topBar = { LoginTopAppBar()},
-        ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+    Content(modifier, navigateToHome, googleOnClick, fbOnClick, navigateToSignUp)
+}
 
-            AuthLogo(resourceId = R.string.sing_in) // TODO: Change logo
+@Composable
+private fun Content(
+    modifier: Modifier,
+    navigateToHome: () -> Unit,
+    googleOnClick: () -> Unit,
+    fbOnClick: () -> Unit,
+    navigateToSignUp: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
+        AuthLogo(resourceId = R.string.sing_in) // TODO: Change logo
 
-            SingIn(navigateToHome = navigateToHome)
+        Spacer(modifier = Modifier.height(16.dp))
 
-            AuthWithSocialMedia(
-                googleOnClick = googleOnClick,
-                fbOnClick = fbOnClick
-            )
+        SingIn(navigateToHome = navigateToHome)
 
-            HaveAccount(
-                mainTextResourceId = R.string.dont_have_an_account,
-                buttonTextResourceId = R.string.sing_in,
-                onClick = navigateToSignUp
-            )
-        }
+        AuthWithSocialMedia(
+            googleOnClick = googleOnClick,
+            fbOnClick = fbOnClick
+        )
+
+        HaveAccount(
+            mainTextResourceId = R.string.dont_have_an_account,
+            buttonTextResourceId = R.string.sing_up,
+            onClick = navigateToSignUp
+        )
     }
 }
 

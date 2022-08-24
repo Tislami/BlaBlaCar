@@ -1,16 +1,13 @@
-package com.zeroone.blablacar.presentation
+package com.zeroone.blablacar.presentation.screens.main
 
 import androidx.compose.material.ScaffoldState
-
 import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavController
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,22 +32,26 @@ class BBCState(
             )
         }
     }
-}
 
-@Composable
-fun rememberBBCState(
-    navController: NavHostController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(
-        snackbarHostState = remember {
-            SnackbarHostState()
-        }
-    ),
-    scope: CoroutineScope = rememberCoroutineScope()
-) = remember(navController, scaffoldState, scope) {
-    BBCState(
-
-        navController = navController,
-        scaffoldState = scaffoldState,
-        coroutineScope = scope
+    val getBottomBarNavItems : List<BottomNavItem> = mutableStateListOf(
+        BottomNavItem.Home,
+        BottomNavItem.Post,
+        BottomNavItem.Profile,
     )
+
+    @Composable
+    fun GetCurrentDestination() : NavDestination? {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        return navBackStackEntry?.destination
+    }
+
+    @Composable
+    fun ShouldShowBottomBar(): Boolean {
+        return when(GetCurrentDestination()?.route){
+            Screen.Registration.route -> false
+            Screen.Login.route -> false
+            else -> true
+        }
+    }
 }
+

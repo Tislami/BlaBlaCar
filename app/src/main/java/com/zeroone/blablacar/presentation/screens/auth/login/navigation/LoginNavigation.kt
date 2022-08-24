@@ -1,13 +1,14 @@
 package com.zeroone.blablacar.presentation.screens.auth.login.navigation
 
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.zeroone.blablacar.presentation.screens.Screen
+import com.google.accompanist.navigation.animation.composable
+import com.zeroone.blablacar.presentation.screens.main.Screen
 import com.zeroone.blablacar.presentation.screens.auth.login.LoginScreen
-import com.zeroone.blablacar.utils.TAG
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.loginGraph(
     modifier: Modifier = Modifier,
     navigateToSignUp: () -> Unit,
@@ -15,14 +16,16 @@ fun NavGraphBuilder.loginGraph(
     googleOnClick: () -> Unit,
     fbOnClick: () -> Unit,
 ) {
-    Log.d(TAG, "loginGraph: ")
-    composable(route = Screen.Login.route) {
+    Log.d("Graph", "loginGraph: ")
+
+    composable(Screen.Login.route,){
         LoginScreen(
             modifier= modifier,
             navigateToSignUp=navigateToSignUp,
             navigateToHome =navigateToHome,
             googleOnClick = googleOnClick,
-            fbOnClick = fbOnClick
+            fbOnClick = fbOnClick,
         )
     }
+
 }

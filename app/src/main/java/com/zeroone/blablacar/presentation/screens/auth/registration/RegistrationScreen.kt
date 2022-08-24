@@ -2,7 +2,6 @@ package com.zeroone.blablacar.presentation.screens.auth.registration
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.presentation.screens.RegistrationTopAppBar
 import com.zeroone.blablacar.presentation.screens.auth.AuthLogo
 import com.zeroone.blablacar.presentation.screens.auth.AuthWithSocialMedia
 import com.zeroone.blablacar.presentation.screens.auth.HaveAccount
@@ -27,35 +25,42 @@ fun RegistrationScreen(
     googleOnClick: () -> Unit,
     fbOnClick: () -> Unit,
 ) {
-    Log.d(TAG, "RegistrationScreen: ")
+    Log.d("Screen", "RegistrationScreen: ")
+    Content(modifier, navigateToHome, googleOnClick, fbOnClick, navigateToSignIn)
+}
 
-    Scaffold (topBar = { RegistrationTopAppBar() }) {
+@Composable
+private fun Content(
+    modifier: Modifier,
+    navigateToHome: () -> Unit,
+    googleOnClick: () -> Unit,
+    fbOnClick: () -> Unit,
+    navigateToSignIn: () -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
 
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
+        AuthLogo(R.string.sing_up) // TODO: Change logo
 
-            AuthLogo(R.string.sing_up) // TODO: Change logo
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        SingUp(navigateToHome = navigateToHome)
 
-            SingUp(navigateToHome = navigateToHome)
+        AuthWithSocialMedia(
+            googleOnClick = googleOnClick,
+            fbOnClick = fbOnClick
+        )
 
-            AuthWithSocialMedia(
-                googleOnClick = googleOnClick,
-                fbOnClick = fbOnClick
-            )
-
-            HaveAccount(
-                mainTextResourceId = R.string.do_you_have_an_account,
-                buttonTextResourceId = R.string.sing_in,
-                onClick = navigateToSignIn
-            )
-        }
+        HaveAccount(
+            mainTextResourceId = R.string.do_you_have_an_account,
+            buttonTextResourceId = R.string.sing_in,
+            onClick = navigateToSignIn
+        )
     }
 }
 

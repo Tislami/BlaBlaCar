@@ -7,6 +7,6 @@ import com.zeroone.blablacar.utils.TAG
 
 @Composable
 fun ProfileScreen() {
-    Log.d(TAG, "ProfileScreen: ")
+    Log.d("Screen", "ProfileScreen: ")
     Search()
 }

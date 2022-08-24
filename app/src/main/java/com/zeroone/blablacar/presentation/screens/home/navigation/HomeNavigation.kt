@@ -1,20 +1,20 @@
 package com.zeroone.blablacar.presentation.screens.home.navigation
 
 import android.util.Log
+import androidx.compose.animation.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import com.zeroone.blablacar.presentation.screens.Screen
-import com.zeroone.blablacar.presentation.screens.auth.login.LoginScreen
+import com.google.accompanist.navigation.animation.composable
+import com.zeroone.blablacar.presentation.screens.main.Screen
 import com.zeroone.blablacar.presentation.screens.home.HomeScreen
-import com.zeroone.blablacar.utils.TAG
 
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.homeGraph(
     modifier: Modifier = Modifier,
     backOnClick:()->Unit,
     postClick:(Int) -> Unit
 ) {
-    Log.d(TAG, "homeGraph: ")
+    Log.d("Graph", "homeGraph: ")
     composable(route = Screen.Home.route) {
         HomeScreen(
             modifier= modifier,

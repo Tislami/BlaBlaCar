@@ -18,7 +18,7 @@ import com.zeroone.blablacar.utils.TAG
 @Composable
 fun PostScreen() {
 
-    Log.d(TAG, "PostScreen: ")
+    Log.d("Screen", "PostScreen: ")
     Column(
         modifier = Modifier
             .padding(horizontal = 8.dp)
