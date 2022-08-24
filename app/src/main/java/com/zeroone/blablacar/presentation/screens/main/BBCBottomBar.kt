@@ -14,9 +14,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.zeroone.blablacar.R
 import javax.annotation.concurrent.Immutable
 
@@ -40,9 +40,9 @@ val bottomNavItems = listOf(
     BottomNavItem.Profile,
 )
 
-
+@NonRestartableComposable
 @Composable
-fun BBCBottomBar(bbcState: BBCState) {
+fun BBCBottomBar(screenState: ScreenState,currentDestination: NavBackStackEntry?) {
 
     Log.d("Screen", "BBCBottomBar: ")
 
@@ -50,17 +50,17 @@ fun BBCBottomBar(bbcState: BBCState) {
         .padding(4.dp)
         .clip(MaterialTheme.shapes.medium)) {
         BottomNavigation {
-            bbcState.getBottomBarNavItems.forEach { item ->
+            screenState.getBottomBarNavItems.forEach { item ->
                 BottomNavigationItem(
                     icon = { Icon(item.icon, contentDescription = null) },
                     label = { Text(stringResource(id = item.resourceId)) },
-                    selected = bbcState.GetCurrentDestination()?.hierarchy?.any { it.route == item.route } == true,
+                    selected = currentDestination?.destination?.hierarchy?.any { it.route == item.route } == true,
                     onClick = {
-                        bbcState.navController.navigate(item.route) {
+                        screenState.navController.navigate(item.route) {
                             // Pop up to the start destination of the graph to
                             // avoid building up a large stack of destinations
                             // on the back stack as users select items
-                            popUpTo(bbcState.navController.graph.findStartDestination().id) {
+                            popUpTo(screenState.navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
                             // Avoid multiple copies of the same destination when

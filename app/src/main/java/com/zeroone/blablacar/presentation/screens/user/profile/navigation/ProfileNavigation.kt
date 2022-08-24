@@ -9,9 +9,14 @@ import com.zeroone.blablacar.presentation.screens.user.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.profileGraph(
-) {
+    backOnClick:()->Unit,
+    settingOnClick:()->Unit,
+    ) {
     Log.d("Graph", "profileGraph: ")
     composable(route = Screen.Profile.route) {
-        ProfileScreen()
+        ProfileScreen(
+            backOnClick = backOnClick,
+            settingOnClick = settingOnClick
+        )
     }
 }

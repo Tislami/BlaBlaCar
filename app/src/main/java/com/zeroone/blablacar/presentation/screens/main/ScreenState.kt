@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class BBCState(
+class ScreenState(
     val navController: NavHostController,
     val scaffoldState: ScaffoldState,
     val coroutineScope: CoroutineScope,
@@ -20,6 +20,10 @@ class BBCState(
 
     fun navigateTo(route:String){
         navController.navigate(route=route)
+    }
+
+    fun navigateToBack(){
+        navController.popBackStack()
     }
 
     private var snackbarJob: Job? = null
@@ -38,20 +42,5 @@ class BBCState(
         BottomNavItem.Post,
         BottomNavItem.Profile,
     )
-
-    @Composable
-    fun GetCurrentDestination() : NavDestination? {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        return navBackStackEntry?.destination
-    }
-
-    @Composable
-    fun ShouldShowBottomBar(): Boolean {
-        return when(GetCurrentDestination()?.route){
-            Screen.Registration.route -> false
-            Screen.Login.route -> false
-            else -> true
-        }
-    }
 }
 

@@ -3,11 +3,11 @@ package com.zeroone.blablacar.presentation.screens.main
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.zeroone.blablacar.presentation.screens.auth.login.navigation.loginGraph
@@ -17,32 +17,34 @@ import com.zeroone.blablacar.presentation.screens.post.navigation.postGraph
 import com.zeroone.blablacar.presentation.screens.user.profile.navigation.profileGraph
 
 @Composable
-fun BBCNavigation(bbcState: BBCState) {
+fun BBCNavigation(screenState: ScreenState) {
 
     Log.d("Screen", "BBCNavigation: ")
-
-    val navBackStackEntry by bbcState.navController.currentBackStackEntryAsState()
+    val navBackStackEntry by screenState.navController.currentBackStackEntryAsState()
 
     Scaffold(
+        scaffoldState = screenState.scaffoldState,
         content = {
             Log.d("Screen", "BBCNavigation: Content")
-            NavHostController(bbcState)
+            NavHostController(screenState = screenState)
         },
         bottomBar = {
             Log.d("Screen", "BBCNavigation: BottomBar")
             when (navBackStackEntry?.destination?.route) {
-                Screen.Home.route -> BBCBottomBar(bbcState = bbcState)
-                Screen.Profile.route -> BBCBottomBar(bbcState = bbcState)
+                Screen.Login.route -> return@Scaffold
+                Screen.Registration.route -> return@Scaffold
             }
+            BBCBottomBar(screenState = screenState,navBackStackEntry)
         }
     )
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun NavHostController(bbcState: BBCState) {
+private fun NavHostController(
+    screenState: ScreenState) {
     AnimatedNavHost(
-        navController = bbcState.navController,
+        navController = screenState.navController,
         startDestination = Screen.Home.route,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
         exitTransition = { fadeOut(animationSpec = tween(0)) },
@@ -50,22 +52,25 @@ private fun NavHostController(bbcState: BBCState) {
         popExitTransition = { fadeOut(animationSpec = tween(0)) },
     ) {
         registrationGraph(
-            navigateToHome = { bbcState.navigateTo(Screen.Home.route) },
-            navigateToSignIn = { bbcState.navigateTo(Screen.Login.route) },
-            googleOnClick = { bbcState.showSnackbar("Google") },
-            fbOnClick = { bbcState.showSnackbar("FB") },
+            navigateToHome = { screenState.navigateTo(Screen.Home.route) },
+            navigateToSignIn = { screenState.navigateTo(Screen.Login.route) },
+            googleOnClick = { screenState.showSnackbar("Google") },
+            fbOnClick = { screenState.showSnackbar("FB") },
         )
         loginGraph(
-            navigateToHome = { bbcState.navigateTo(Screen.Home.route) },
-            navigateToSignUp = { bbcState.navigateTo(Screen.Registration.route) },
-            googleOnClick = { bbcState.showSnackbar("Google") },
-            fbOnClick = { bbcState.showSnackbar("FB") },
+            navigateToHome = { screenState.navigateTo(Screen.Home.route) },
+            navigateToSignUp = { screenState.navigateTo(Screen.Registration.route) },
+            googleOnClick = { screenState.showSnackbar("Google") },
+            fbOnClick = { screenState.showSnackbar("FB") },
         )
         homeGraph(
-            backOnClick = { bbcState.navigateTo(Screen.Registration.route) },
-            postClick = { bbcState.navigateTo(Screen.Post.route + "/$it") }
+            backOnClick = { screenState.navigateTo(Screen.Registration.route) },
+            postClick = { screenState.navigateTo(Screen.Post.route + "/$it") }
         )
-        profileGraph()
+        profileGraph(
+            backOnClick = { screenState.navigateToBack() },
+            settingOnClick = { screenState.showSnackbar("Not ready yet") },
+            )
         postGraph()
     }
 }
