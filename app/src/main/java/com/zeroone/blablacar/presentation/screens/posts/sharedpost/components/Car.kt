@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.post.components
+package com.zeroone.blablacar.presentation.screens.posts.sharedpost.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable

@@ -3,17 +3,15 @@ package com.zeroone.blablacar.presentation.screens.main
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.zeroone.blablacar.presentation.screens.auth.login.navigation.loginGraph
 import com.zeroone.blablacar.presentation.screens.auth.registration.navigation.registrationGraph
 import com.zeroone.blablacar.presentation.screens.home.navigation.homeGraph
-import com.zeroone.blablacar.presentation.screens.post.navigation.postGraph
+import com.zeroone.blablacar.presentation.screens.posts.newpostscreen.navigation.newPostGraph
+import com.zeroone.blablacar.presentation.screens.posts.sharedpost.navigation.expandedPostGraph
 import com.zeroone.blablacar.presentation.screens.user.profile.navigation.profileGraph
 
 @Composable
@@ -33,6 +31,7 @@ fun BBCNavigation(screenState: ScreenState) {
             when (navBackStackEntry?.destination?.route) {
                 Screen.Login.route -> return@Scaffold
                 Screen.Registration.route -> return@Scaffold
+                Screen.NewPost.route -> return@Scaffold
             }
             BBCBottomBar(screenState = screenState,navBackStackEntry)
         }
@@ -65,13 +64,18 @@ private fun NavHostController(
         )
         homeGraph(
             backOnClick = { screenState.navigateTo(Screen.Registration.route) },
-            postClick = { screenState.navigateTo(Screen.Post.route + "/$it") }
+            postOnClick = { screenState.navigateTo(Screen.ExpandedPost.route + "/$it") }
         )
         profileGraph(
             backOnClick = { screenState.navigateToBack() },
             settingOnClick = { screenState.showSnackbar("Not ready yet") },
             )
-        postGraph()
+
+        newPostGraph(
+            backOnClick = { screenState.navigateToBack() },
+            shareClick = { screenState.showSnackbar("Not ready yet")}
+        )
+        expandedPostGraph()
     }
 }
 

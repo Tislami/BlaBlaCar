@@ -2,12 +2,8 @@ package com.zeroone.blablacar.presentation.screens.main
 
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -39,7 +35,7 @@ class ScreenState(
 
     val getBottomBarNavItems : List<BottomNavItem> = mutableStateListOf(
         BottomNavItem.Home,
-        BottomNavItem.Post,
+        BottomNavItem.NewPost,
         BottomNavItem.Profile,
     )
 }

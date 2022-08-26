@@ -29,16 +29,10 @@ sealed class BottomNavItem(
     @Immutable
     object Home : BottomNavItem(Screen.Home.route, R.string.home, Icons.Default.Home)
     @Immutable
-    object Post : BottomNavItem(Screen.Login.route, R.string.add, Icons.Default.Add)
+    object NewPost : BottomNavItem(Screen.NewPost.route, R.string.add, Icons.Default.Add)
     @Immutable
     object Profile : BottomNavItem(Screen.Profile.route, R.string.profile, Icons.Default.Person)
 }
-
-val bottomNavItems = listOf(
-    BottomNavItem.Home,
-    BottomNavItem.Post,
-    BottomNavItem.Profile,
-)
 
 @NonRestartableComposable
 @Composable

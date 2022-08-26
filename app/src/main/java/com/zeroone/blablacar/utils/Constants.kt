@@ -7,7 +7,7 @@ import java.util.*
 const val TAG : String = "BBCApp"
 const val NAME = "BlaBlaCar"
 
-val MONTH = mutableListOf<String>(
+val MONTH = mutableListOf(
     "JANUARY",
     "FEBRUARY",
     "MARCH",

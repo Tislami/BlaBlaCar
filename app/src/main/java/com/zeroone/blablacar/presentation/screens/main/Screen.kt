@@ -13,10 +13,13 @@ sealed class Screen(val route: String) {
     object Home : Screen("home")
 
     @Immutable
-    object Post : Screen("post")
+    object ExpandedPost : Screen("expandedPost")
 
     @Immutable
     object Profile : Screen("profile")
+
+    @Immutable
+    object NewPost : Screen("newPost")
 
     @Immutable
     object EditProfile : Screen("editProfile")

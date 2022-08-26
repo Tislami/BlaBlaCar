@@ -1,15 +1,23 @@
-package com.zeroone.blablacar.presentation.screens.post.cards
+package com.zeroone.blablacar.presentation.screens.posts.sharedpost.cards
 
+import android.util.Log
+import androidx.compose.animation.*
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -18,25 +26,35 @@ import com.zeroone.blablacar.domain.model.Post
 import com.zeroone.blablacar.presentation.ui.cards.*
 
 @Composable
-fun Post(modifier: Modifier=Modifier,post: Post) {
+fun CollapsedPost(
+    modifier: Modifier = Modifier,
+    post: Post,
+    index: String,
+    enterTransition: EnterTransition
+) {
 
-    BBCCard{
-        Column(
-            modifier = modifier.padding(8.dp),
+    val visibleState = MutableTransitionState(false).apply {
+        targetState= true
+    }
+
+    AnimatedVisibility(
+        visibleState = visibleState,
+        enter = enterTransition
+    ) {
+        BBCCard {
+            Column(
+                modifier = modifier.padding(8.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
+                Text(text = index)
                 Location(post)
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Date(post)
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 PersonAndPrice(post)
             }
         }
-
+    }
 }
 
 @Composable
@@ -104,7 +122,7 @@ private fun PersonAndPrice(post: Post) {
                 contentDescription = null
             )
             Spacer(modifier = Modifier.width(4.dp))
-            
+
             BBCPostText(text = "${post.car.emptySeat} ${stringResource(id = R.string.empty_seat)}")
         }
 
