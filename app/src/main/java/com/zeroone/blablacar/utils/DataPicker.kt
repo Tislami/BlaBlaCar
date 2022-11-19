@@ -2,7 +2,9 @@ package com.zeroone.blablacar.utils
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun rememberDatePicker(): DatePickerDialog {
     val context = LocalContext.current

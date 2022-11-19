@@ -14,7 +14,6 @@ fun NavGraphBuilder.homeGraph(
     backOnClick:()->Unit,
     postOnClick:(Int) -> Unit
 ) {
-    Log.d("Graph", "homeGraph: ")
     composable(route = Screen.Home.route) {
         HomeScreen(
             modifier= modifier,
