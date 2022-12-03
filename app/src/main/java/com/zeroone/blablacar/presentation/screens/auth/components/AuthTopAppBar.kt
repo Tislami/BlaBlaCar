@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.auth.login
+package com.zeroone.blablacar.presentation.screens.auth.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon

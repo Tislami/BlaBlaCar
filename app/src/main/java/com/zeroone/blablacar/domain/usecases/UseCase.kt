@@ -1,3 +1,6 @@
 package com.zeroone.blablacar.domain.usecases
 
-data class UseCase(var useCase: UseCase)
+import com.zeroone.blablacar.domain.usecases.auth.AuthUseCase
+
+data class UseCase(
+    var authUseCase: AuthUseCase)

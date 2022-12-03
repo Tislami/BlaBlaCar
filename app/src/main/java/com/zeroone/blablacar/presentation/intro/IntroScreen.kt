@@ -51,19 +51,17 @@ fun IntroScreen(
 
             Spacer(Modifier.height(LocalDimensions.current.extraLarge))
 
-
             BBCPrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
-                stringResource(id = R.string.sing_up)) {
-                navController.navigate(AuthScreens.AuthSelection.route + "/sign_up")
-            }
+                text = stringResource(id = R.string.sing_up),
+                onClick = { navController.navigate(AuthScreens.Registration.route) }
+            )
 
 
             BBCTextButton(
                 text = stringResource(id = R.string.login),
-                onClick = {
-                    navController.navigate(AuthScreens.AuthSelection.route + "/login")
-                })
+                onClick = { navController.navigate(AuthScreens.Login.route) }
+            )
         }
     }
 }
