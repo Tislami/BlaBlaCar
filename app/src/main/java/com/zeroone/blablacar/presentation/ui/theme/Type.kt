@@ -41,7 +41,7 @@ val Typography = Typography(
     button = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp
+        fontSize = 14.sp
     ),
     subtitle1 = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,

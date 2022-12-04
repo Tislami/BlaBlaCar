@@ -8,6 +8,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun BBCTextField(
@@ -31,8 +32,9 @@ fun BBCTextField(
             Text(
                 text = labelText,
                 color = MaterialTheme.colors.onBackground.copy(alpha = .5f),
-                style = MaterialTheme.typography.button
-            )
+                style = MaterialTheme.typography.button,
+                textAlign = TextAlign.Center,
+                )
         },
     )
 }

@@ -62,6 +62,7 @@
     <string name="date"> Date </string>
     <string name="time"> Time </string>
     <string name="max"> Max </string>
+    <string name="search_for_a_trip"> Search for a trip </string>
     <string name="no_smoking"> No smoking in the car </string>
     <string name="pet_allowed"> Pets allowed </string>
     <string name="car"> Car </string>

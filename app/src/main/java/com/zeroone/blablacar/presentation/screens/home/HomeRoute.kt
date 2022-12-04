@@ -1,25 +1,45 @@
 package com.zeroone.blablacar.presentation.screens.home
 
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.User
 import com.zeroone.blablacar.domain.model.defaultUser
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
 import com.zeroone.blablacar.presentation.ui.cards.PostCard
 import com.zeroone.blablacar.presentation.ui.components.BBCTextField
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeRoute(
@@ -33,11 +53,29 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
 
+    val listState: LazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val showButton by remember {
+        derivedStateOf { listState.firstVisibleItemIndex > 0 }
+    }
+
+
     Scaffold(
-        topBar = { HomeTopAppBar() },
+        topBar = {
+            HomeTopAppBar(
+                showButton = showButton,
+                onClick = {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                }
+            )
+        },
         content = {
             HomeContent(
                 modifier = modifier.padding(it),
+                listState = listState,
                 date = "Bugün",
                 personSize = 5,
                 dateOnClick = {},
@@ -48,39 +86,43 @@ fun HomeScreen(
     )
 }
 
-
 @Composable
 private fun HomeContent(
     modifier: Modifier = Modifier,
+    listState: LazyListState,
     date: String,
     personSize: Int,
     personSizeOnClick: () -> Unit,
     dateOnClick: () -> Unit,
     searchOnClick: () -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        state = listState,
+    ) {
 
-        Head(
-            date,
-            dateOnClick,
-            personSize,
-            personSizeOnClick,
-            searchOnClick
-        )
-        LazyColumn(
-            modifier = Modifier.padding(top = 16.dp),
-        ) {
-            items(15) {
-                PostCard(
-                    dateTime = "Pzt 25 Tem, 20:00",
-                    fromLocation = "Eskişehir",
-                    toLocation = "İstanbul",
-                    user = defaultUser,
-                    onClick = {},
-                )
+        item {
+            Head(
+                date,
+                dateOnClick,
+                personSize,
+                personSizeOnClick,
+                searchOnClick
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+        }
+
+        items(15) {
+            PostCard(
+                dateTime = "Pzt 25 Tem, 20:00",
+                fromLocation = "Eskişehir",
+                toLocation = "İstanbul",
+                user = defaultUser,
+                onClick = {},
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -93,8 +135,8 @@ private fun Head(
     personSizeOnClick: () -> Unit,
     searchOnClick: () -> Unit
 ) {
-    BBCTextField(value = "", onValueChange = {}, labelText = "Kalkış yeri")
-    BBCTextField(value = "", onValueChange = {}, labelText = "Varış yeri")
+    BBCTextField(value = "", onValueChange = {}, labelText = stringResource(id = R.string.from))
+    BBCTextField(value = "", onValueChange = {}, labelText = stringResource(id = R.string.to))
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -143,7 +185,8 @@ private fun Head(
             shape = MaterialTheme.shapes.medium
         ) {
             Text(
-                text = "Ara",
+                text = stringResource(id = R.string.search),
+                maxLines= 1,
                 style = MaterialTheme.typography.button
             )
         }
