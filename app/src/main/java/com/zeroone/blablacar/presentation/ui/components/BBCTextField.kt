@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.auth.components
+package com.zeroone.blablacar.presentation.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AuthTextField(
+fun BBCTextField(
     value: String,
     onValueChange: (String) -> Unit,
     labelText: String,

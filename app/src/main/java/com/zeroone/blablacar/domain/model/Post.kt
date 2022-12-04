@@ -24,7 +24,7 @@ data class Post(
 var defaultPost = Post(
     id = 0,
     car = Car(name = "Mercedes S Class", "",  4,4,0),
-    user = User("Name","Surname", listOf(5.0f)),
+    user = User("Name","Surname",),
     from = "Location1",
     to = "Location2",
     date = "15 SEPTEMBER",

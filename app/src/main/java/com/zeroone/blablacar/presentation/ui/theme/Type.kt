@@ -1,5 +1,6 @@
 package com.zeroone.blablacar.presentation.ui.theme
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -9,38 +10,43 @@ import androidx.compose.ui.unit.sp
 import com.zeroone.blablacar.R
 
 
-val FontFamily.Companion.HarmoniaSans
+val FontFamily.Companion.HarmoniaSansBold
     get() = FontFamily(
         Font(R.font.harmonia_sans_w01_bold),
+        )
+
+val FontFamily.Companion.HarmoniaSansRegular
+    get() = FontFamily(
         Font(R.font.harmonia_sans_w01_regular),
-    )
+        )
 
 
 val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.HarmoniaSans,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    ),
+
     h1 = TextStyle(
-        fontFamily = FontFamily.HarmoniaSans,
+        fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Bold,
         fontSize = 30.sp
     ),
-    caption= TextStyle(
-        fontFamily = FontFamily.HarmoniaSans,
+    caption = TextStyle(
+        fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Bold,
-        fontSize = 30.sp
+        fontSize = 24.sp,
+    ),
+    body1 = TextStyle(
+        fontFamily = FontFamily.HarmoniaSansBold,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
     ),
     button = TextStyle(
-        fontFamily = FontFamily.HarmoniaSans,
+        fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp
     ),
     subtitle1 = TextStyle(
-        fontFamily = FontFamily.HarmoniaSans,
-        fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontFamily = FontFamily.HarmoniaSansBold,
+        fontWeight = FontWeight.Thin,
+        fontSize = 18.sp
     ),
 
     /* Other default text styles to override

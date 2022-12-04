@@ -17,10 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.presentation.screens.auth.AuthState
 import com.zeroone.blablacar.presentation.screens.auth.AuthViewModel
-import com.zeroone.blablacar.presentation.screens.auth.LoginState
 import com.zeroone.blablacar.presentation.screens.auth.RegistrationState
 import com.zeroone.blablacar.presentation.screens.auth.components.AuthTopAppBar
-import com.zeroone.blablacar.presentation.screens.auth.components.AuthTextField
+import com.zeroone.blablacar.presentation.ui.components.BBCTextField
 import com.zeroone.blablacar.presentation.ui.Loading
 import com.zeroone.blablacar.presentation.ui.components.BBCGreetingText
 import com.zeroone.blablacar.presentation.ui.components.BBCPrimaryButton
@@ -112,11 +111,11 @@ private fun RegistrationContent(
     Column(modifier = modifier.fillMaxSize()) {
         BBCGreetingText(stringResource(id = R.string.what_is_email_and_password))
 
-        AuthTextField(eMail, eMailValueOnChange, stringResource(id = R.string.e_mail))
+        BBCTextField(eMail, eMailValueOnChange, stringResource(id = R.string.e_mail))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        AuthTextField(password, passwordValueOnChange, stringResource(id = R.string.password))
+        BBCTextField(password, passwordValueOnChange, stringResource(id = R.string.password))
     }
 }
 

@@ -1,3 +1,4 @@
+package com.zeroone.blablacar.presentation.screens.user.profile/*
 package com.zeroone.blablacar.presentation.screens.user.profile
 
 import android.util.Log
@@ -21,7 +22,6 @@ import androidx.constraintlayout.motion.widget.MotionScene
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.User
 import com.zeroone.blablacar.domain.model.defaultPost
-import com.zeroone.blablacar.presentation.screens.home.components.Search
 import com.zeroone.blablacar.presentation.screens.user.profile.components.ProfileTopBar
 import com.zeroone.blablacar.presentation.ui.cards.BBCBoldText
 import com.zeroone.blablacar.presentation.ui.cards.BBCImage
@@ -71,3 +71,4 @@ fun ProfileScreen(
         bottomBar = {}
     )
 }
+*/

@@ -1,3 +1,4 @@
+package com.zeroone.blablacar.presentation.screens.user.profile.navigation/*
 package com.zeroone.blablacar.presentation.screens.user.profile.navigation
 
 import android.util.Log
@@ -6,7 +7,6 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.zeroone.blablacar.domain.model.defaultPost
 import com.zeroone.blablacar.presentation.screens.main.Screen
-import com.zeroone.blablacar.presentation.screens.user.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.profileGraph(
@@ -21,4 +21,4 @@ fun NavGraphBuilder.profileGraph(
             settingOnClick = settingOnClick
         )
     }
-}
+}*/

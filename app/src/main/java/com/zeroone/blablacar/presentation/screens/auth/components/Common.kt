@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.auth
+package com.zeroone.blablacar.presentation.screens.auth.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*

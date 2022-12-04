@@ -1,3 +1,4 @@
+package com.zeroone.blablacar.presentation.screens.posts.newpostscreen/*
 package com.zeroone.blablacar.presentation.screens.posts.newpostscreen
 
 import android.app.DatePickerDialog
@@ -25,7 +26,7 @@ import com.zeroone.blablacar.R
 import com.zeroone.blablacar.presentation.ui.cards.BBCBoldText
 import com.zeroone.blablacar.presentation.ui.cards.BBCCard
 import com.zeroone.blablacar.presentation.ui.cards.BBCText
-import com.zeroone.blablacar.presentation.ui.cards.BBCTextField
+import com.zeroone.blablacar.presentation.ui.components.BBCTextField
 import com.zeroone.blablacar.utils.MONTH
 import com.zeroone.blablacar.utils.rememberDatePicker
 import com.zeroone.blablacar.utils.rememberTimePicker
@@ -181,4 +182,4 @@ private fun DriverCustomer(isDriver: MutableState<Boolean>) {
                 onClick = { isDriver.value = false })
         }
     }
-}
+}*/

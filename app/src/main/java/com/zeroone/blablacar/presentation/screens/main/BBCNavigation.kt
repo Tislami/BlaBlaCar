@@ -10,18 +10,17 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.zeroone.blablacar.presentation.intro.IntroScreen
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
+import com.zeroone.blablacar.presentation.screens.home.HomeRoute
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BBCNavigation(screenState: ScreenState) {
+fun BBCNavigation() {
 
     val navController = rememberAnimatedNavController()
 
     Scaffold(
-        scaffoldState = screenState.scaffoldState,
         content = { innerPadding ->
             NavHostController(
                 modifier = Modifier
@@ -44,26 +43,20 @@ private fun NavHostController(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.Intro.route,
+        startDestination = Screen.Home.route,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
         popExitTransition = { fadeOut(animationSpec = tween(0)) },
     ) {
 
-        composable(route = Screen.Intro.route) {
-            IntroScreen(modifier,navController)
-        }
-
         authNavigation(modifier,navController)
 
-        /*loginGraph(
-            modifier = modifier,
-            signUpOnClick = { navController.navigate(Screen.Registration.route) },
-            homeOnClick = { navController.navigate(Screen.Registration.route) },
-            fbOnClick = { navController.navigate(Screen.Registration.route) },
-            backOnClick = { navController.popBackStack() },
-        )*/
+        composable(Screen.Home.route) {
+            HomeRoute(
+                modifier = modifier,
+            )
+        }
     }
 }
 

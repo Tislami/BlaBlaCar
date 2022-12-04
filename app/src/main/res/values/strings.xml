@@ -51,6 +51,7 @@
     <string name="follow"> Follow </string>
     <string name="unfollow"> Unfollow </string>
     <string name="contact"> Contact </string>
+    <string name="profile_photo"> Profile Photo </string>
 
     //Post
     <string name="person"> Person </string>

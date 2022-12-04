@@ -1,3 +1,4 @@
+package com.zeroone.blablacar.presentation.screens.posts.newpostscreen.navigation/*
 package com.zeroone.blablacar.presentation.screens.posts.newpostscreen.navigation
 
 import android.util.Log
@@ -22,4 +23,4 @@ fun NavGraphBuilder.newPostGraph(
             shareClick = shareClick,
         )
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.intro
+package com.zeroone.blablacar.presentation.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -20,7 +20,8 @@ import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 @Composable
 fun IntroScreen(
     modifier: Modifier = Modifier,
-    navController: NavController
+    loginOnClick : ()-> Unit,
+    signUpOnClick : ()-> Unit,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
 
@@ -54,13 +55,13 @@ fun IntroScreen(
             BBCPrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.sing_up),
-                onClick = { navController.navigate(AuthScreens.Registration.route) }
+                onClick = signUpOnClick
             )
 
 
             BBCTextButton(
                 text = stringResource(id = R.string.login),
-                onClick = { navController.navigate(AuthScreens.Login.route) }
+                onClick = loginOnClick
             )
         }
     }

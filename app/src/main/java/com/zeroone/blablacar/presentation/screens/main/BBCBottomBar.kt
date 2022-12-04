@@ -34,6 +34,7 @@ sealed class BottomNavItem(
     object Profile : BottomNavItem(Screen.Profile.route, R.string.profile, Icons.Default.Person)
 }
 
+/*
 @NonRestartableComposable
 @Composable
 fun BBCBottomBar(screenState: ScreenState,currentDestination: NavBackStackEntry?) {
@@ -69,4 +70,5 @@ fun BBCBottomBar(screenState: ScreenState,currentDestination: NavBackStackEntry?
         }
     }
 }
+*/
 
