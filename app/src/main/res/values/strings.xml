@@ -19,6 +19,7 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="add_photo">Add photo</string>
+    <string name="add_car">Add car</string>
 
     //Login
     <string name="username">Username</string>
@@ -66,6 +67,7 @@
     <string name="no_smoking"> No smoking in the car </string>
     <string name="pet_allowed"> Pets allowed </string>
     <string name="car"> Car </string>
+    <string name="cars"> Cars </string>
     <string name="about"> About </string>
     <string name="drive"> Drive </string>
     <string name="polite"> Polite </string>
@@ -85,10 +87,6 @@
     <string name="inbox"> Inbox </string>
     <string name="profile"> Profile </string>
 
-
     <string name="lorem"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet consequatur minus, necessitatibus nihil non nostrum officiis pariatur perspiciatis qui quia repellat repudiandae sunt vel velit? Accusamus, cupiditate nulla? Expedita. </string>
-
-
-
 
 </resources>

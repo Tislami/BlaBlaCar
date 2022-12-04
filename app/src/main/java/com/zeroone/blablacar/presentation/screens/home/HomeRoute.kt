@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.User
+import com.zeroone.blablacar.domain.model.defaultPost
 import com.zeroone.blablacar.domain.model.defaultUser
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
@@ -113,16 +114,12 @@ private fun HomeContent(
             Spacer(modifier = Modifier.height(16.dp))
 
         }
-
         items(15) {
             PostCard(
-                dateTime = "Pzt 25 Tem, 20:00",
-                fromLocation = "Eskişehir",
-                toLocation = "İstanbul",
-                user = defaultUser,
+                post = defaultPost,
                 onClick = {},
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
         }
     }
 }

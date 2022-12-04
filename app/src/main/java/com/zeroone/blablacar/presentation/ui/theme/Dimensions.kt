@@ -10,7 +10,8 @@ data class Dimensions(
     val large: Dp = 16.dp,
     val extraLarge: Dp = 16.dp,
     val screenHorizontalPadding: Dp = 24.dp,
-    val profileImageSize : Dp = 65.dp
+    val profileImageSizeMin : Dp = 65.dp,
+    val profileImageSize : Dp = 100.dp
 )
 
 

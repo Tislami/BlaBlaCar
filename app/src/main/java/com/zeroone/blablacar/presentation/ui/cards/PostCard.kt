@@ -19,15 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.zeroone.blablacar.domain.model.Post
 import com.zeroone.blablacar.domain.model.User
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
 @Composable
 fun PostCard(
-    dateTime: String,
-    fromLocation: String,
-    toLocation: String,
-    user: User,
+    post: Post,
     onClick: () -> Unit,
 ) {
     Card(
@@ -41,12 +39,12 @@ fun PostCard(
             modifier = Modifier
                 .padding(16.dp, 16.dp, 16.dp, 32.dp)
         ) {
-            Title(dateTime)
+            Title(post.date+post.time)
             Spacer(modifier = Modifier.height(16.dp))
-            LocationField(fromLocation)
-            LocationField(toLocation)
+            LocationField(post.from)
+            LocationField(post.to)
             Spacer(modifier = Modifier.height(16.dp))
-            UserField(user)
+            UserField(post.user)
         }
     }
 }
@@ -67,7 +65,7 @@ private fun UserField(user: User) {
         Surface(
             shape = CircleShape,
             modifier = Modifier
-                .size(LocalDimensions.current.profileImageSize)
+                .size(LocalDimensions.current.profileImageSizeMin)
         ) {
 
             AsyncImage(
@@ -79,7 +77,7 @@ private fun UserField(user: User) {
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(text = user.nickname)
+        Text(text = "${user.name}.${user.surname}")
     }
 }
 

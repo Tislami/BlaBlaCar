@@ -22,7 +22,6 @@ val FontFamily.Companion.HarmoniaSansRegular
 
 
 val Typography = Typography(
-
     h1 = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Bold,
@@ -38,6 +37,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp
     ),
+    body2 = TextStyle(
+        fontFamily = FontFamily.HarmoniaSansRegular,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
+    ),
     button = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Medium,
@@ -47,6 +51,11 @@ val Typography = Typography(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Thin,
         fontSize = 18.sp
+    ),
+    subtitle2 = TextStyle(
+        fontFamily = FontFamily.HarmoniaSansBold,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
     ),
 
     /* Other default text styles to override

@@ -24,10 +24,10 @@ data class Post(
 var defaultPost = Post(
     id = 0,
     car = Car(name = "Mercedes S Class", "",  4,4,0),
-    user = User("Name","Surname",),
+    user = defaultUser,
     from = "Location1",
     to = "Location2",
-    date = "15 SEPTEMBER",
+    date = "Pzt 25 Tem,",
     time = "15:50",
     price = 15.0f
 )

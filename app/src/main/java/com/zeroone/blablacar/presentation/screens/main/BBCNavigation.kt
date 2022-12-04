@@ -12,6 +12,8 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
 import com.zeroone.blablacar.presentation.screens.home.HomeRoute
+import com.zeroone.blablacar.presentation.screens.user.profile.ProfileRoute
+import com.zeroone.blablacar.presentation.screens.user.profile.ProfileScreen
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -43,7 +45,7 @@ private fun NavHostController(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Profile.route,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
@@ -56,6 +58,10 @@ private fun NavHostController(
             HomeRoute(
                 modifier = modifier,
             )
+        }
+
+        composable(Screen.Profile.route) {
+            ProfileRoute(modifier = modifier)
         }
     }
 }

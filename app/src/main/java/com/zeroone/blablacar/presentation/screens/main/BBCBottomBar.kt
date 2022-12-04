@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +37,13 @@ sealed class BottomNavItem(
     object Search : BottomNavItem(Screen.Home.route, R.string.search, Icons.Default.Search)
 
     @Immutable
-    object NewPost : BottomNavItem(Screen.NewPost.route, R.string.new_post, Icons.Rounded.Add)
+    object NewPost : BottomNavItem(Screen.NewPost.route, R.string.new_post, Icons.Rounded.AddCircle)
 
     @Immutable
     object MyTravels : BottomNavItem(Screen.Profile.route, R.string.my_travels, Icons.Default.Person)
 
     @Immutable
-    object Inbox : BottomNavItem(Screen.Profile.route, R.string.inbox, Icons.Default.Send)
+    object Inbox : BottomNavItem(Screen.Profile.route, R.string.inbox, Icons.Default.Email)
 
     @Immutable
     object Profile : BottomNavItem(Screen.Profile.route, R.string.profile, Icons.Default.Person)
@@ -72,9 +73,10 @@ fun BBCBottomBar(
 
         items.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(item.icon, contentDescription = null) },
+                icon = { Icon(imageVector = item.icon, contentDescription = null) },
                 //label = { Text(stringResource(item.resourceId)) },
                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                selectedContentColor = MaterialTheme.colors.primary,
                 onClick = {/*
                     navController.navigate(item.route) {
                         // Pop up to the start destination of the graph to
