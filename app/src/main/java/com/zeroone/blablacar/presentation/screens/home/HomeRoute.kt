@@ -68,7 +68,7 @@ private fun HomeContent(
             searchOnClick
         )
         LazyColumn(
-            modifier = Modifier.padding(vertical = 16.dp),
+            modifier = Modifier.padding(top = 16.dp),
         ) {
             items(15) {
                 PostCard(

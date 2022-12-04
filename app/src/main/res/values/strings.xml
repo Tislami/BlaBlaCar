@@ -78,8 +78,10 @@
     <string name="empty_seat"> empty seat </string>
 
     //BottomBar
-    <string name="home"> Home </string>
-    <string name="add"> Add </string>
+    <string name="search"> Search </string>
+    <string name="new_post"> New Post </string>
+    <string name="my_travels"> My Travels </string>
+    <string name="inbox"> Inbox </string>
     <string name="profile"> Profile </string>
 
 

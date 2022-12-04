@@ -30,7 +30,7 @@ fun BBCNavigation() {
             )
         },
         bottomBar = {
-            // BBCBottomBar(screenState = screenState,navBackStackEntry)
+            BBCBottomBar(navController = navController)
         }
     )
 }

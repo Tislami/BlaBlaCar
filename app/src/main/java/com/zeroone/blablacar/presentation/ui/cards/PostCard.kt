@@ -28,17 +28,18 @@ fun PostCard(
     fromLocation: String,
     toLocation: String,
     user: User,
-    onClick:()-> Unit,
+    onClick: () -> Unit,
 ) {
     Card(
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = MaterialTheme.shapes.medium,
         elevation = 8.dp
     ) {
         Column(
-            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 32.dp)
+            modifier = Modifier
+                .padding(16.dp, 16.dp, 16.dp, 32.dp)
         ) {
             Title(dateTime)
             Spacer(modifier = Modifier.height(16.dp))
