@@ -10,7 +10,7 @@ import com.zeroone.blablacar.presentation.screens.auth.IntroScreen
 import com.zeroone.blablacar.presentation.screens.auth.login.LoginRoute
 import com.zeroone.blablacar.presentation.screens.auth.registration.RegistrationRoute
 import com.zeroone.blablacar.presentation.screens.main.Graph
-import com.zeroone.blablacar.presentation.screens.main.Screen
+import com.zeroone.blablacar.presentation.screens.main.Routes
 import javax.annotation.concurrent.Immutable
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -20,17 +20,17 @@ fun NavGraphBuilder.authNavigation(
 ) {
     navigation(
         route = Graph.AUTHENTICATION,
-        startDestination = AuthScreens.Intro.route,
+        startDestination = AuthRoutes.Intro.route,
     ) {
-        composable(route = Screen.Intro.route) {
+        composable(route = Routes.Intro.route) {
             IntroScreen(
                 modifier = modifier,
-                signUpOnClick = { navController.navigate(AuthScreens.Registration.route) },
-                loginOnClick = { navController.navigate(AuthScreens.Login.route) }
+                signUpOnClick = { navController.navigate(AuthRoutes.Registration.route) },
+                loginOnClick = { navController.navigate(AuthRoutes.Login.route) }
             )
         }
 
-        composable(route = AuthScreens.Registration.route)
+        composable(route = AuthRoutes.Registration.route)
         {
             RegistrationRoute(
                 modifier = modifier,
@@ -38,7 +38,7 @@ fun NavGraphBuilder.authNavigation(
             )
         }
 
-        composable(AuthScreens.Login.route) {
+        composable(AuthRoutes.Login.route) {
             LoginRoute(
                 modifier = modifier,
                 backOnClick = { navController.popBackStack() }
@@ -47,11 +47,11 @@ fun NavGraphBuilder.authNavigation(
     }
 }
 
-sealed class AuthScreens(val route: String) {
+sealed class AuthRoutes(val route: String) {
     @Immutable
-    object Registration : AuthScreens("Registration")
+    object Registration : AuthRoutes("Registration")
     @Immutable
-    object Login : AuthScreens("Login")
+    object Login : AuthRoutes("Login")
     @Immutable
-    object Intro : AuthScreens("intro")
+    object Intro : AuthRoutes("intro")
 }

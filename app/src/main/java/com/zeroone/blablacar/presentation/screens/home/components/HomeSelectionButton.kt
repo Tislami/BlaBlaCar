@@ -44,13 +44,15 @@ fun HomeSelectionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
+                tint = MaterialTheme.colors.onBackground.copy(alpha = 1f),
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
                 text = text,
-                style = MaterialTheme.typography.subtitle1
+                color = MaterialTheme.colors.onBackground.copy(alpha = 1f),
+                style = MaterialTheme.typography.button
             )
         }
     }

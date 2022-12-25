@@ -1,12 +1,10 @@
 package com.zeroone.blablacar.presentation.screens.auth.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun LoginRoute(
     modifier: Modifier = Modifier,
     backOnClick: () -> Unit,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
 ) {
     val scaffoldState = rememberScaffoldState()
     val authState by authViewModel.authStates
@@ -46,7 +44,6 @@ fun LoginRoute(
             }
         }
     }
-
 
     if (authViewModel.isLoading.value)
         Loading()
@@ -110,14 +107,22 @@ private fun LoginContent(
     eMailValueOnChange: (String) -> Unit,
     passwordValueOnChange: (String) -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize().background(MaterialTheme.colors.background)
+    ) {
         BBCGreetingText(stringResource(id = R.string.what_is_email_and_password))
 
-        BBCTextField(eMail, eMailValueOnChange, stringResource(id = R.string.e_mail))
+        BBCTextField(
+            value =eMail,
+            onValueChange = eMailValueOnChange,
+            labelText = stringResource(id = R.string.e_mail))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BBCTextField(password, passwordValueOnChange, stringResource(id = R.string.password))
+        BBCTextField(
+            value = password,
+            onValueChange = passwordValueOnChange,
+            labelText = stringResource(id = R.string.password)
+        )
 
         BBCTextButton(text = stringResource(id = R.string.forgot_password)) {
 

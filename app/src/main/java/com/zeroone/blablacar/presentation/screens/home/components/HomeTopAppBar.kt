@@ -46,6 +46,7 @@ internal fun HomeTopAppBar(
             ) {
                 Text(
                     text = stringResource(id = R.string.search),
+                    color = MaterialTheme.colors.onPrimary,
                     style = MaterialTheme.typography.button
                 )
             }

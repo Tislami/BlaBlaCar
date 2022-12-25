@@ -17,6 +17,7 @@ internal fun BBCGreetingText(
     Text(
         text = text,
         textAlign = textAlign,
+        color= MaterialTheme.colors.onBackground,
         style = MaterialTheme.typography.h1,
     )
 }

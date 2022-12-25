@@ -10,13 +10,9 @@ import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.User
 
 @Composable
-fun ProfileTopBar(
-    backOnClick: () -> Unit,
-    settingOnClick: () -> Unit
-) {
-    var selectedIndex by remember { mutableStateOf(0) }
+fun ProfileTopBar(selectedIndex: MutableState<Int>, ) {
     TabRow(
-        selectedTabIndex = selectedIndex,
+        selectedTabIndex = selectedIndex.value,
         backgroundColor = Color.Transparent,
         divider = {
             TabRowDefaults.Divider(color = Color.Transparent)
@@ -24,20 +20,16 @@ fun ProfileTopBar(
     ) {
         Tab(
             text = { Text(stringResource(id = R.string.about)) },
-            selected = selectedIndex == 0,
-            onClick = {
-                selectedIndex = 0
-            },
+            selected = selectedIndex.value == 0,
+            onClick = { selectedIndex.value = 0 },
             selectedContentColor = MaterialTheme.colors.onBackground,
             unselectedContentColor = MaterialTheme.colors.primary,
             )
 
         Tab(
-            text = { Text(stringResource(id = R.string.profile)) },
-            selected = selectedIndex == 1,
-            onClick = {
-                selectedIndex = 1
-            },
+            text = { Text(stringResource(id = R.string.account)) },
+            selected = selectedIndex.value == 1,
+            onClick = { selectedIndex.value = 1 },
             selectedContentColor = MaterialTheme.colors.onBackground,
             unselectedContentColor = MaterialTheme.colors.primary,
         )

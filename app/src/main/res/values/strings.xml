@@ -87,6 +87,8 @@
     <string name="inbox"> Inbox </string>
     <string name="profile"> Profile </string>
 
+    <string name="account"> Account </string>
+
     <string name="lorem"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus amet consequatur minus, necessitatibus nihil non nostrum officiis pariatur perspiciatis qui quia repellat repudiandae sunt vel velit? Accusamus, cupiditate nulla? Expedita. </string>
 
 </resources>

@@ -9,9 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.presentation.screens.auth.navigation.AuthScreens
 import com.zeroone.blablacar.presentation.ui.components.BBCTextButton
 import com.zeroone.blablacar.presentation.ui.components.BBCGreetingText
 import com.zeroone.blablacar.presentation.ui.components.BBCPrimaryButton
@@ -36,7 +34,6 @@ fun IntroScreen(
             )
         }
 
-        Divider()
 
         Column(
             modifier = Modifier

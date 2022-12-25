@@ -1,22 +1,10 @@
 package com.zeroone.blablacar.presentation.screens.home
 
-
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -25,17 +13,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.domain.model.User
 import com.zeroone.blablacar.domain.model.defaultPost
-import com.zeroone.blablacar.domain.model.defaultUser
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
 import com.zeroone.blablacar.presentation.ui.cards.PostCard
@@ -98,7 +79,9 @@ private fun HomeContent(
     searchOnClick: () -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background),
         state = listState,
     ) {
 
@@ -128,8 +111,8 @@ private fun HomeContent(
 private fun Head(
     date: String,
     dateOnClick: () -> Unit,
-    personSize: Int,
-    personSizeOnClick: () -> Unit,
+    personCount: Int,
+    personCountOnClick: () -> Unit,
     searchOnClick: () -> Unit
 ) {
     BBCTextField(value = "", onValueChange = {}, labelText = stringResource(id = R.string.from))
@@ -144,7 +127,7 @@ private fun Head(
                 .padding(vertical = 8.dp)
                 .weight(.5f)
                 .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colors.onSecondary.copy(alpha = .25f))
+                .background(MaterialTheme.colors.surface)
                 .fillMaxWidth()
                 .height(55.dp)
         ) {
@@ -160,14 +143,14 @@ private fun Head(
                 Modifier
                     .fillMaxHeight()
                     .padding(vertical = 8.dp)
-                    .width(2.dp)
+                    .width(2.dp),
             )
 
             HomeSelectionButton(
                 modifier = Modifier.weight(.30f),
-                text = personSize.toString(),
+                text = personCount.toString(),
                 icon = Icons.Default.Person,
-                onClick = personSizeOnClick
+                onClick = personCountOnClick
             )
         }
 
@@ -183,7 +166,7 @@ private fun Head(
         ) {
             Text(
                 text = stringResource(id = R.string.search),
-                maxLines= 1,
+                maxLines = 1,
                 style = MaterialTheme.typography.button
             )
         }

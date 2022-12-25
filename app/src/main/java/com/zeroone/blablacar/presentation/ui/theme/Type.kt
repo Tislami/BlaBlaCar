@@ -30,17 +30,17 @@ val Typography = Typography(
     caption = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
+        fontSize = 22.sp,
     ),
     body1 = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp
+        fontSize = 18.sp
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.HarmoniaSansRegular,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 16.sp
     ),
     button = TextStyle(
         fontFamily = FontFamily.HarmoniaSansBold,

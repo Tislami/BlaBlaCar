@@ -111,11 +111,17 @@ private fun RegistrationContent(
     Column(modifier = modifier.fillMaxSize()) {
         BBCGreetingText(stringResource(id = R.string.what_is_email_and_password))
 
-        BBCTextField(eMail, eMailValueOnChange, stringResource(id = R.string.e_mail))
+        BBCTextField(
+            value = eMail,
+            onValueChange = eMailValueOnChange,
+            labelText = stringResource(id = R.string.e_mail))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BBCTextField(password, passwordValueOnChange, stringResource(id = R.string.password))
+        BBCTextField(
+            value = password,
+            onValueChange = passwordValueOnChange,
+            labelText = stringResource(id = R.string.password))
     }
 }
 

@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.auth.components
+package com.zeroone.blablacar.presentation.screens.posts
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.R
 
 @Composable
-fun AuthTopAppBar(
+internal fun NewPostTopAppBar(
     buttonIcon: ImageVector,
     onClick: () -> Unit) {
     TopAppBar(
@@ -26,7 +26,7 @@ fun AuthTopAppBar(
         ) {
             Icon(
                 imageVector = buttonIcon,
-                contentDescription = stringResource(id = R.string.close),
+                contentDescription = null,
                 tint = MaterialTheme.colors.primary,
                 modifier = Modifier.size(30.dp)
             )

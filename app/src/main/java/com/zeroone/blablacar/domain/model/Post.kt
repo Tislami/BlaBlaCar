@@ -13,7 +13,9 @@ data class Post(
     val to: String,
     val date: String,
     val time: String,
+    val customerCount: Int,
     val price: Float,
+
 ) {
     fun dayOfWeek(): String {
         return "Monday"
@@ -29,6 +31,7 @@ var defaultPost = Post(
     to = "Location2",
     date = "Pzt 25 Tem,",
     time = "15:50",
+    customerCount = 8,
     price = 15.0f
 )
 
