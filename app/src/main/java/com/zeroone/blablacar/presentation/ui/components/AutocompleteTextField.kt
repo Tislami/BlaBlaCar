@@ -123,6 +123,7 @@ fun AutocompleteTextField(
                             onSuggestionSelect(title)
                             focusManager.clearFocus()
                             expanded = false
+                            onDone(title)
                         }
                     )
                     Divider()

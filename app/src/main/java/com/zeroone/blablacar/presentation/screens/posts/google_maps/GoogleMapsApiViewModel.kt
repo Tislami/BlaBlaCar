@@ -1,15 +1,14 @@
 package com.zeroone.blablacar.presentation.screens.posts.google_maps
 
 import android.util.Log
-import android.webkit.WebStorage.Origin
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.navigation.animation.AnimatedComposeNavigator
 import com.google.android.gms.maps.model.LatLng
 import com.zeroone.blablacar.domain.model.Response
 import com.zeroone.blablacar.domain.repository.google_maps.GoogleMapsApiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +26,8 @@ class GoogleMapsApiViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<GeoPlaceUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private var autocompleteJob : Job? = null
 
     fun findPlacea(input: String) {
         viewModelScope.launch {
@@ -49,24 +50,26 @@ class GoogleMapsApiViewModel @Inject constructor(
     }
 
     fun autocomplete(input: String) {
-        viewModelScope.launch {
+        autocompleteJob?.cancel()
+        autocompleteJob = viewModelScope.launch {
             googleMapsApiRepository.autocomplete(input = input).collect { response ->
                 when (response) {
                     is Response.Error -> {
                         isLoading.value = false
                         _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
                     }
-                    is Response.Loading -> {
-                        isLoading.value = true
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar("Loading"))
-                    }
+                    is Response.Loading -> { isLoading.value = true }
                     is Response.Success -> {
+
+                        val suggestions : MutableMap<String,String> = mutableMapOf()
+                        response.data.predictions.map {
+                            suggestions[it.description] = it.place_id
+                        }
+
                         googleMapsApiState.value =
                             googleMapsApiState.value.copy(
                                 autocomplete = response.data,
-                                suggestions = response.data.predictions.map { prediction->
-                                    prediction.description
-                                }
+                                suggestions = suggestions
                             )
                     }
                 }
@@ -86,10 +89,7 @@ class GoogleMapsApiViewModel @Inject constructor(
                         isLoading.value = false
                         _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
                     }
-                    is Response.Loading -> {
-                        isLoading.value = true
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar("Loading"))
-                    }
+                    is Response.Loading -> { isLoading.value = true }
                     is Response.Success -> {
                         googleMapsApiState.value = googleMapsApiState.value.copy(
                             direction = response.data
@@ -100,18 +100,16 @@ class GoogleMapsApiViewModel @Inject constructor(
                                     polyLinesPoints = decodePoly(it)
                                 )
                             }
-
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar("Loaded"))
                     }
                 }
             }
         }
     }
 
-    fun getLocation(latLng: LatLng) {
+    fun getReverseLocation(latLng: LatLng) {
         val value = "${latLng.latitude},${latLng.longitude}"
         viewModelScope.launch {
-            googleMapsApiRepository.getLocation(value).collect { response ->
+            googleMapsApiRepository.getReverseLocation(value).collect { response ->
                 when (response) {
                     is Response.Error -> {
                         isLoading.value = false
@@ -119,10 +117,43 @@ class GoogleMapsApiViewModel @Inject constructor(
                     }
                     is Response.Loading -> { isLoading.value = true }
                     is Response.Success -> {
+                        val suggestions : MutableMap<String,String> = mutableMapOf()
+                        response.data.results.map {
+                            suggestions[it.formatted_address] = it.place_id
+                        }
+
                         googleMapsApiState.value =
                             googleMapsApiState.value.copy(
                                 reverseGeocoding = response.data,
-                                suggestions =  response.data.results.map { it.formatted_address }
+                                suggestions =  suggestions
+                            )
+                    }
+                }
+            }
+        }
+    }
+
+    fun getLocation(placeId: String?) {
+        if (placeId!=null)
+            viewModelScope.launch {
+            googleMapsApiRepository.getLocation(placeId).collect { response ->
+                when (response) {
+                    is Response.Error -> {
+                        isLoading.value = false
+                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
+                    }
+                    is Response.Loading -> { isLoading.value = true }
+                    is Response.Success -> {
+
+                        var fromLocation = LatLng(40.40144780549906,49.85737692564726)
+                        response.data.results.map {
+                            fromLocation = LatLng(it.geometry.location.lat,it.geometry.location.lng)
+                        }
+
+                        googleMapsApiState.value =
+                            googleMapsApiState.value.copy(
+                                geocoding = response.data,
+                                fromLocation = fromLocation
                             )
                     }
                 }

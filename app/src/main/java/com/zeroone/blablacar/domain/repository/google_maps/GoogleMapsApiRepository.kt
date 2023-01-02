@@ -1,8 +1,9 @@
 package com.zeroone.blablacar.domain.repository.google_maps
 
-import com.google.android.gms.maps.model.LatLng
+import android.util.Log
 import com.zeroone.blablacar.data.remote.google_maps.DirectionApi
 import com.zeroone.blablacar.data.remote.google_maps.GeocodingApi
+import com.zeroone.blablacar.data.remote.google_maps.ReverseGeocodingApi
 import com.zeroone.blablacar.data.remote.google_maps.geo_place.AutocompleteApi
 import com.zeroone.blablacar.data.remote.google_maps.geo_place.FindPlaceApi
 import com.zeroone.blablacar.domain.model.Response
@@ -19,13 +20,15 @@ interface GoogleMapsApiRepository {
     suspend fun autocomplete(input: String): Flow<Response<Autocomplete>>
     suspend fun findPlace(input: String): Flow<Response<FindPlace>>
     suspend fun getDirection(destination: String,origin: String,region:String): Flow<Response<Direction>>
-    suspend fun getLocation(latLng: String): Flow<Response<ReverseGeocoding>>
+    suspend fun getReverseLocation(latLng: String): Flow<Response<ReverseGeocoding>>
+    suspend fun getLocation(placeId: String): Flow<Response<Geocoding>>
 }
 
 class GoogleMapsApiRepositoryImpl(
     private val autocompleteApi: AutocompleteApi,
     private val findPlaceApi: FindPlaceApi,
     private val directionApi: DirectionApi,
+    private val reverseGeocodingApi: ReverseGeocodingApi,
     private val geocodingApi: GeocodingApi,
     ) :
     GoogleMapsApiRepository {
@@ -66,13 +69,23 @@ class GoogleMapsApiRepositoryImpl(
         }
     }
 
-    override suspend fun getLocation(latLng: String) = flow {
+    override suspend fun getReverseLocation(latLng: String) = flow {
         emit(Response.Loading)
         try {
-            val data = geocodingApi.getLocation(latLng)
+            val data = reverseGeocodingApi.getLocation(latLng)
             emit(Response.Success(data))
         } catch (e: HttpException) {
             emit(Response.Error("Oops something is wrong ${e.message}"))
+        }
+    }
+
+    override suspend fun getLocation(placeId: String) = flow {
+        emit(Response.Loading)
+        try {
+            val data = geocodingApi.getLocation(placeId)
+            emit(Response.Success(data))
+        } catch (e: HttpException) {
+            emit(Response.Error("Oops something is wrong : getLocation ${e.message}"))
         }
     }
 

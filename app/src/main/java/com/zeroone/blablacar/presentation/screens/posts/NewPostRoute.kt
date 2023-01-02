@@ -2,7 +2,6 @@ package com.zeroone.blablacar.presentation.screens.posts
 
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -82,17 +81,13 @@ private fun NewPostScreen(
                     newPostViewModel.setToLocation(it)
                     googleMapsApiViewModel.autocomplete(it)
                 },
-                onDone = {
-
-                    googleMapsApiViewModel.getDirection(
-                        destination = newPostState.toLocationLatLng,
-                        origin = newPostState.fromLocationLatLng,
-                    )
-                },
-                onMapLongClick = {
-                    googleMapsApiViewModel.getLocation(it)
-                    Log.d("MapTag", "NewPostScreen: ___________ $it")
-                }
+                onFromDone = { googleMapsApiViewModel.getLocation(
+                    googleMapsApiState.suggestions[it]
+                ) },
+                onToDone = { googleMapsApiViewModel.getLocation(
+                    googleMapsApiState.suggestions[it]
+                ) },
+                onMapLongClick = googleMapsApiViewModel::getReverseLocation
             )
         }
     )
@@ -106,7 +101,8 @@ private fun NewPostContent(
     newPostState: NewPostState,
     onFromLocationValueChange: (String) -> Unit,
     onToLocationValueChange: (String) -> Unit,
-    onDone: (String) -> Unit,
+    onFromDone: (String) -> Unit,
+    onToDone: (String) -> Unit,
     onMapLongClick: (LatLng)->Unit
     ) {
 
@@ -119,18 +115,18 @@ private fun NewPostContent(
             value = newPostState.fromLocation,
             onValueChange = onFromLocationValueChange,
             labelText = stringResource(id = R.string.from),
-            suggestions = googleMapsApiState.suggestions,
+            suggestions = googleMapsApiState.suggestions.map { it.key },
             onSuggestionSelect = onFromLocationValueChange,
-            onDone = onDone
+            onDone = onFromDone
         )
 
         AutocompleteTextField(
             value = newPostState.toLocation,
             onValueChange = onToLocationValueChange,
             labelText = stringResource(id = R.string.to),
-            suggestions = googleMapsApiState.suggestions,
+            suggestions = googleMapsApiState.suggestions.map { it.key },
             onSuggestionSelect = onToLocationValueChange,
-            onDone = onDone
+            onDone = onToDone
         )
 
         Surface(
@@ -154,20 +150,25 @@ fun GoogleMapView(
 ) {
 
     val baku = LatLng(40.40144780549906,49.85737692564726)
+    val cameraPositionState = rememberCameraPositionState{ position = CameraPosition.fromLatLngZoom(baku,6f) }
+    val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
+    val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
+    val fromMarkerState = rememberMarkerState()
+    val toMarkerState = rememberMarkerState()
 
-    val cameraPositionState = rememberCameraPositionState{
-        position = CameraPosition.fromLatLngZoom(baku,6f)
+    LaunchedEffect(key1 = googleMapsApiState.fromLocation){
+        if (googleMapsApiState.fromLocation!=null){
+            fromMarkerState.position = googleMapsApiState.fromLocation
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(googleMapsApiState.fromLocation,15f)
+        }
     }
 
-    val mapProperties by remember {
-        mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+    LaunchedEffect(key1 = googleMapsApiState.toLocation){
+        if (googleMapsApiState.toLocation!=null){
+            toMarkerState.position = googleMapsApiState.toLocation
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(googleMapsApiState.toLocation,15f)
+        }
     }
-
-    val uiSettings by remember {
-        mutableStateOf(MapUiSettings(compassEnabled = false))
-    }
-
-    val markerState = rememberMarkerState()
 
     GoogleMap(
         modifier = Modifier,
@@ -176,14 +177,13 @@ fun GoogleMapView(
         uiSettings = uiSettings,
         onMapLongClick = {
             onMapLongClick(it)
-            markerState.position = it
+            fromMarkerState.position = it
             cameraPositionState.position = CameraPosition.fromLatLngZoom(it,15f)
         }
     ) {
 
-        Marker(
-            state =markerState
-        )
+        Marker(state =fromMarkerState)
+        Marker(state =toMarkerState)
 
         Polyline(
             points = googleMapsApiState.polyLinesPoints,

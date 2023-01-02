@@ -3,6 +3,7 @@ package com.zeroone.blablacar.di
 import com.zeroone.blablacar.data.remote.FirebaseDatabase
 import com.zeroone.blablacar.data.remote.google_maps.DirectionApi
 import com.zeroone.blablacar.data.remote.google_maps.GeocodingApi
+import com.zeroone.blablacar.data.remote.google_maps.ReverseGeocodingApi
 import com.zeroone.blablacar.data.remote.google_maps.geo_place.AutocompleteApi
 import com.zeroone.blablacar.data.remote.google_maps.geo_place.FindPlaceApi
 import com.zeroone.blablacar.domain.repository.*
@@ -44,6 +45,16 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideReverseGeocodingApi() : ReverseGeocodingApi {
+        return Retrofit.Builder()
+            .baseUrl(GOOGLE_API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ReverseGeocodingApi::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideGeocodingApi() : GeocodingApi {
         return Retrofit.Builder()
             .baseUrl(GOOGLE_API_BASE_URL)
@@ -79,13 +90,15 @@ object AppModule {
         findPlaceApi: FindPlaceApi,
         directionApi: DirectionApi,
         geocodingApi: GeocodingApi,
+        reverseGeocodingApi: ReverseGeocodingApi,
     ): GoogleMapsApiRepository {
         return GoogleMapsApiRepositoryImpl(
             autocompleteApi,
             findPlaceApi,
             directionApi,
-            geocodingApi
-        )
+            reverseGeocodingApi,
+            geocodingApi,
+            )
     }
 
 

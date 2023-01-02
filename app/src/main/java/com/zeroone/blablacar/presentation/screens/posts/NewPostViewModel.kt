@@ -21,16 +21,4 @@ class NewPostViewModel @Inject constructor() : ViewModel() {
     fun setToLocation(value:String){
         newPostState.value = newPostState.value.copy(toLocation = value)
     }
-
-    fun setFromLocationLatLng(latLng: LatLng){
-        val value = "${latLng.latitude},${latLng.longitude}"
-        newPostState.value = newPostState.value.copy(fromLocationLatLng = value)
-    }
-
-    fun setToLocationLatLng(latLng: LatLng){
-        val value = "${latLng.latitude},${latLng.longitude}"
-        newPostState.value = newPostState.value.copy(toLocationLatLng = value)
-    }
-
-
 }
