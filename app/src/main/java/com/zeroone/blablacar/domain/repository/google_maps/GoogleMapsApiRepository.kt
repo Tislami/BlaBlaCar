@@ -19,7 +19,7 @@ import retrofit2.HttpException
 interface GoogleMapsApiRepository {
     suspend fun autocomplete(input: String): Flow<Response<Autocomplete>>
     suspend fun findPlace(input: String): Flow<Response<FindPlace>>
-    suspend fun getDirection(destination: String,origin: String,region:String): Flow<Response<Direction>>
+    suspend fun getDirection(destination: String,origin: String): Flow<Response<Direction>>
     suspend fun getReverseLocation(latLng: String): Flow<Response<ReverseGeocoding>>
     suspend fun getLocation(placeId: String): Flow<Response<Geocoding>>
 }
@@ -54,14 +54,10 @@ class GoogleMapsApiRepositoryImpl(
         }
     }
 
-    override suspend fun getDirection(
-        destination: String,
-        origin: String,
-        region: String,
-    )= flow {
+    override suspend fun getDirection(destination: String, origin: String)= flow {
         emit(Response.Loading)
         try {
-            val data = directionApi.getDirection(destination,origin,region)
+            val data = directionApi.getDirection(destination = destination, origin= origin)
             emit(Response.Success(data))
 
         } catch (e: HttpException) {

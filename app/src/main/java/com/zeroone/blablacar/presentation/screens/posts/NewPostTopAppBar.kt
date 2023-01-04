@@ -8,28 +8,46 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.zeroone.blablacar.R
 
 @Composable
 internal fun NewPostTopAppBar(
-    buttonIcon: ImageVector,
-    onClick: () -> Unit) {
+    navigationIcon: ImageVector,
+    actionButtonIcon: ImageVector,
+    onNavigationClick: () -> Unit,
+    onActionButtonClick: () -> Unit,
+    actionButtonVisible: Boolean,
+) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
-        elevation = 0.dp
-    ) {
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier
-        ) {
-            Icon(
-                imageVector = buttonIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colors.primary,
-                modifier = Modifier.size(30.dp)
-            )
+        elevation = 0.dp,
+        title = {},
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigationClick,
+                modifier = Modifier
+            ) {
+                Icon(
+                    imageVector = navigationIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        },
+        actions = {
+            if (actionButtonVisible)
+            IconButton(
+                onClick = onActionButtonClick,
+                modifier = Modifier
+            ) {
+                Icon(
+                    imageVector = actionButtonIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
         }
-    }
+    )
 }

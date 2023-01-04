@@ -1,6 +1,5 @@
 package com.zeroone.blablacar.presentation.screens.posts.google_maps
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,15 +18,15 @@ class GoogleMapsApiViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    var googleMapsApiState = mutableStateOf(GoogleMapsApiState())
+    var newPostState = mutableStateOf(NewPostState())
         private set
 
     val isLoading = mutableStateOf(false)
 
-    private val _eventFlow = MutableSharedFlow<GeoPlaceUiEvent>()
+    private val _eventFlow = MutableSharedFlow<GoogleMapsApiUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private var autocompleteJob : Job? = null
+    private var autocompleteJob: Job? = null
 
     fun findPlacea(input: String) {
         viewModelScope.launch {
@@ -35,39 +34,41 @@ class GoogleMapsApiViewModel @Inject constructor(
                 when (response) {
                     is Response.Error -> {
                         isLoading.value = false
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
+                        _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
                     }
                     is Response.Loading -> {
                         isLoading.value = true
                     }
                     is Response.Success -> {
-                        googleMapsApiState.value =
-                            googleMapsApiState.value.copy(findPlace = response.data)
+                        newPostState.value =
+                            newPostState.value.copy(findPlace = response.data)
                     }
                 }
             }
         }
     }
 
-    fun autocomplete(input: String) {
+    private fun autocomplete(input: String) {
         autocompleteJob?.cancel()
         autocompleteJob = viewModelScope.launch {
             googleMapsApiRepository.autocomplete(input = input).collect { response ->
                 when (response) {
                     is Response.Error -> {
                         isLoading.value = false
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
+                        _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
                     }
-                    is Response.Loading -> { isLoading.value = true }
+                    is Response.Loading -> {
+                        isLoading.value = true
+                    }
                     is Response.Success -> {
 
-                        val suggestions : MutableMap<String,String> = mutableMapOf()
+                        val suggestions: MutableMap<String, String> = mutableMapOf()
                         response.data.predictions.map {
                             suggestions[it.description] = it.place_id
                         }
 
-                        googleMapsApiState.value =
-                            googleMapsApiState.value.copy(
+                        newPostState.value =
+                            newPostState.value.copy(
                                 autocomplete = response.data,
                                 suggestions = suggestions
                             )
@@ -77,33 +78,48 @@ class GoogleMapsApiViewModel @Inject constructor(
         }
     }
 
-    fun getDirection(destination: String, origin: String) {
-        viewModelScope.launch {
-            googleMapsApiRepository.getDirection(
-                destination = destination,
-                origin = origin,
-                region = "az"
-            ).collect { response ->
-                when (response) {
-                    is Response.Error -> {
-                        isLoading.value = false
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
-                    }
-                    is Response.Loading -> { isLoading.value = true }
-                    is Response.Success -> {
-                        googleMapsApiState.value = googleMapsApiState.value.copy(
-                            direction = response.data
-                        )
-                        googleMapsApiState.value.direction?.routes
-                            ?.get(0)?.overview_polyline?.points?.let {
-                                googleMapsApiState.value = googleMapsApiState.value.copy(
-                                    polyLinesPoints = decodePoly(it)
-                                )
+    fun getDirection() {
+        val destination = newPostState.value.toLocation
+        val origin = newPostState.value.fromLocation
+
+        if (destination != null && origin != null)
+            viewModelScope.launch {
+                googleMapsApiRepository.getDirection(
+                    destination = "${destination.latitude},${destination.longitude}",
+                    origin = "${origin.latitude},${origin.longitude}",
+                ).collect { response ->
+                    when (response) {
+                        is Response.Error -> {
+                            isLoading.value = false
+                            _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
+                        }
+                        is Response.Loading -> {
+                            isLoading.value = true
+                        }
+                        is Response.Success -> {
+
+                            val routes = mutableListOf<List<LatLng>>()
+                            newPostState.value.direction?.routes?.onEach { route ->
+                                route.overview_polyline.points.let {
+                                    routes.add(decodePoly(it))
+                                }
                             }
+                            newPostState.value = newPostState.value.copy(
+                                direction=response.data,
+                                polyLinesPoints = routes
+                            )
+                        }
                     }
                 }
             }
+    }
+
+    fun getSelectedDirection(points : List<LatLng>) {
+        val temp  = mutableListOf(points)
+        newPostState.value.polyLinesPoints.map{
+            if (it!=points){ temp.add(it) }
         }
+        newPostState.value = newPostState.value.copy(polyLinesPoints = temp)
     }
 
     fun getReverseLocation(latLng: LatLng) {
@@ -113,19 +129,21 @@ class GoogleMapsApiViewModel @Inject constructor(
                 when (response) {
                     is Response.Error -> {
                         isLoading.value = false
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
+                        _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
                     }
-                    is Response.Loading -> { isLoading.value = true }
+                    is Response.Loading -> {
+                        isLoading.value = true
+                    }
                     is Response.Success -> {
-                        val suggestions : MutableMap<String,String> = mutableMapOf()
+                        val suggestions: MutableMap<String, String> = mutableMapOf()
                         response.data.results.map {
                             suggestions[it.formatted_address] = it.place_id
                         }
 
-                        googleMapsApiState.value =
-                            googleMapsApiState.value.copy(
+                        newPostState.value =
+                            newPostState.value.copy(
                                 reverseGeocoding = response.data,
-                                suggestions =  suggestions
+                                suggestions = suggestions
                             )
                     }
                 }
@@ -133,35 +151,62 @@ class GoogleMapsApiViewModel @Inject constructor(
         }
     }
 
-    fun getLocation(placeId: String?) {
-        if (placeId!=null)
+    fun getLocation(placeId: String?, locationState: LocationState) {
+        if (placeId != null)
             viewModelScope.launch {
-            googleMapsApiRepository.getLocation(placeId).collect { response ->
-                when (response) {
-                    is Response.Error -> {
-                        isLoading.value = false
-                        _eventFlow.emit(GeoPlaceUiEvent.ShowSnackBar(response.message))
-                    }
-                    is Response.Loading -> { isLoading.value = true }
-                    is Response.Success -> {
-
-                        var fromLocation = LatLng(40.40144780549906,49.85737692564726)
-                        response.data.results.map {
-                            fromLocation = LatLng(it.geometry.location.lat,it.geometry.location.lng)
+                googleMapsApiRepository.getLocation(placeId).collect { response ->
+                    when (response) {
+                        is Response.Error -> {
+                            isLoading.value = false
+                            _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
                         }
+                        is Response.Loading -> {
+                            isLoading.value = true
+                        }
+                        is Response.Success -> {
 
-                        googleMapsApiState.value =
-                            googleMapsApiState.value.copy(
-                                geocoding = response.data,
-                                fromLocation = fromLocation
-                            )
+                            var location = LatLng(40.40144780549906, 49.85737692564726)
+                            response.data.results.map {
+                                location =
+                                    LatLng(it.geometry.location.lat, it.geometry.location.lng)
+                            }
+                            when (locationState) {
+                                LocationState.From -> {
+                                    newPostState.value =
+                                        newPostState.value.copy(
+                                            geocoding = response.data,
+                                            fromLocation = location
+                                        )
+                                }
+                                LocationState.To -> {
+                                    newPostState.value =
+                                        newPostState.value.copy(
+                                            geocoding = response.data,
+                                            toLocation = location
+                                        )
+                                }
+                            }
+                        }
                     }
                 }
             }
-        }
     }
 
-
+    fun setLocationTextValue(value:String, locationState: LocationState){
+        when(locationState){
+            LocationState.From -> {
+                newPostState.value = newPostState.value.copy(
+                    fromLocationText = value
+                )
+            }
+            LocationState.To -> {
+                newPostState.value = newPostState.value.copy(
+                    toLocationText = value
+                )
+            }
+        }
+        autocomplete(value)
+    }
 
     /**
      * Method to decode polyline points
@@ -205,7 +250,7 @@ class GoogleMapsApiViewModel @Inject constructor(
         return poly
     }
 
-    sealed class GeoPlaceUiEvent {
-        data class ShowSnackBar(val message: String) : GeoPlaceUiEvent()
+    sealed class GoogleMapsApiUiEvent {
+        data class ShowSnackBar(val message: String) : GoogleMapsApiUiEvent()
     }
 }
