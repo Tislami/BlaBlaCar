@@ -7,10 +7,9 @@ import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.ButtCap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.compose.*
 import com.zeroone.blablacar.domain.model.google_map.direction.Direction
-import com.zeroone.blablacar.domain.model.google_map.direction.OverviewPolyline
+import com.zeroone.blablacar.utils.decodePoly
 
 
 @Composable
@@ -52,13 +51,13 @@ fun GoogleMapView(
 fun GoogleMapView(
     fromLocation: LatLng?,
     toLocation: LatLng?,
-    points: List<List<LatLng>>? = null,
+    direction: Direction? = null,
     onPolyLineOnClick : (List<LatLng>)-> Unit,
     ) {
-    if (points != null && points.isNotEmpty()) {
-        val center = points[points.size / 2][points.size / 2]
+    if (direction != null && fromLocation!=null && toLocation!=null) {
+
         val cameraPositionState =
-            rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(center, 6f) }
+            rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(fromLocation, 6f) }
         val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
         val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
         val width by remember { mutableStateOf(15.0f) }
@@ -66,13 +65,13 @@ fun GoogleMapView(
 
         val fromMarkerState = rememberMarkerState(
             position = LatLng(
-                fromLocation!!.latitude,
+                fromLocation.latitude,
                 fromLocation.longitude
             )
         )
         val toMarkerState = rememberMarkerState(
             position = LatLng(
-                toLocation!!.latitude,
+                toLocation.latitude,
                 toLocation.longitude
             )
         )
@@ -86,10 +85,10 @@ fun GoogleMapView(
             Marker(state = fromMarkerState)
             Marker(state = toMarkerState)
 
-            points.onEachIndexed { index, points ->
+            direction.routes.onEachIndexed { index, route ->
                 Polyline(
                     color = if (index == 0) MaterialTheme.colors.primary else Color.Gray,
-                    points = points,
+                    points = decodePoly(route.overview_polyline.points),
                     endCap = ButtCap(),
                     width = width,
                     zIndex = if (index == 0) 11.0f else 10.0f,

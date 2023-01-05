@@ -8,12 +8,9 @@ import com.zeroone.blablacar.domain.model.google_map.geocoding.Geocoding
 import com.zeroone.blablacar.domain.model.google_map.reverse_geocoding.ReverseGeocoding
 
 data class NewPostState(
-    val autocomplete: Autocomplete? = null,
-    val findPlace: FindPlace? = null,
     val reverseGeocoding: ReverseGeocoding? = null,
     val geocoding: Geocoding? = null,
     val direction: Direction? = null,
-    val polyLinesPoints: List<List<LatLng>> = emptyList(),
     val suggestions: MutableMap<String,String> = mutableMapOf(),
     val fromLocation: LatLng? = null,
     val toLocation: LatLng? = null,

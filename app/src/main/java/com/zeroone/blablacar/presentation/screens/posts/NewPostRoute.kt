@@ -134,7 +134,7 @@ private fun NewPostScreen(
                         modifier = modifier.padding(innerPadding),
                         fromLocation = newPostState.fromLocation,
                         toLocation = newPostState.toLocation,
-                        points = newPostState.polyLinesPoints,
+                        direction = newPostState.direction,
                         onPolyLineOnClick = googleMapsApiViewModel::getSelectedDirection
                     )
                 }

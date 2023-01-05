@@ -59,6 +59,8 @@
     <string name="location"> Location </string>
     <string name="location_and_date"> Location &amp; Date</string>
     <string name="from"> From </string>
+    <string name="where_are_you_going_from"> Where are you going from? </string>
+    <string name="where_are_you_going_to"> Where are you going to? </string>
     <string name="to"> To </string>
     <string name="date"> Date </string>
     <string name="time"> Time </string>
