@@ -15,6 +15,7 @@ import com.zeroone.blablacar.domain.model.google_map.reverse_geocoding.ReverseGe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 
 interface GoogleMapsApiRepository {
     suspend fun autocomplete(input: String): Flow<Response<Autocomplete>>
@@ -40,6 +41,8 @@ class GoogleMapsApiRepositoryImpl(
 
         } catch (e: HttpException) {
             emit(Response.Error("Oops something is wrong ${e.message}"))
+        } catch (e: SocketTimeoutException) {
+            emit(Response.Error("Oops something is wrong ${e.message}"))
         }
     }
 
@@ -50,6 +53,8 @@ class GoogleMapsApiRepositoryImpl(
             emit(Response.Success(data))
 
         } catch (e: HttpException) {
+            emit(Response.Error("Oops something is wrong ${e.message}"))
+        } catch (e: SocketTimeoutException) {
             emit(Response.Error("Oops something is wrong ${e.message}"))
         }
     }
@@ -62,6 +67,8 @@ class GoogleMapsApiRepositoryImpl(
 
         } catch (e: HttpException) {
             emit(Response.Error("Oops something is wrong ${e.message}"))
+        } catch (e: SocketTimeoutException) {
+            emit(Response.Error("Oops something is wrong ${e.message}"))
         }
     }
 
@@ -72,6 +79,8 @@ class GoogleMapsApiRepositoryImpl(
             emit(Response.Success(data))
         } catch (e: HttpException) {
             emit(Response.Error("Oops something is wrong ${e.message}"))
+        } catch (e: SocketTimeoutException) {
+            emit(Response.Error("Oops something is wrong ${e.message}"))
         }
     }
 
@@ -81,7 +90,9 @@ class GoogleMapsApiRepositoryImpl(
             val data = geocodingApi.getLocation(placeId)
             emit(Response.Success(data))
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong : getLocation ${e.message}"))
+            emit(Response.Error("Oops something is wrong ${e.message}"))
+        } catch (e: SocketTimeoutException) {
+            emit(Response.Error("Oops something is wrong ${e.message}"))
         }
     }
 

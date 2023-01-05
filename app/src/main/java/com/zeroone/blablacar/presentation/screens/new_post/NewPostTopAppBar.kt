@@ -1,10 +1,7 @@
 package com.zeroone.blablacar.presentation.screens.new_post
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -12,6 +9,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun NewPostTopAppBar(
+    newPostLoadingState: NewPostLoadingState,
     navigationIcon: ImageVector,
     actionButtonIcon: ImageVector,
     onNavigationClick: () -> Unit,
@@ -36,17 +34,21 @@ internal fun NewPostTopAppBar(
             }
         },
         actions = {
-            if (actionButtonVisible)
-            IconButton(
-                onClick = onActionButtonClick,
-                modifier = Modifier
-            ) {
-                Icon(
-                    imageVector = actionButtonIcon,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.primary,
-                    modifier = Modifier.size(30.dp)
-                )
+            if (newPostLoadingState.locationLoadingState || newPostLoadingState.reverseLocationLoadingState) {
+                CircularProgressIndicator()
+            }
+            if (actionButtonVisible) {
+                IconButton(
+                    onClick = onActionButtonClick,
+                    modifier = Modifier
+                ) {
+                    Icon(
+                        imageVector = actionButtonIcon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.primary,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
             }
         }
     )

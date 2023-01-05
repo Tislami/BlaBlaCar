@@ -16,6 +16,13 @@ data class NewPostState(
     val toLocationText: String = ""
 )
 
+data class NewPostLoadingState(
+    val locationLoadingState: Boolean=false,
+    val reverseLocationLoadingState: Boolean=false,
+    val autocompleteLoadingState: Boolean=false,
+    val directionLoadingState: Boolean=false,
+)
+
 enum class LocationState{
     From,
     To

@@ -32,7 +32,9 @@ fun AutocompleteTextField(
     labelText: String,
     suggestions: List<String>,
     onSuggestionSelect: (String) -> Unit,
+    isLoading: Boolean,
     onDone: (String) -> Unit,
+
 ) {
     val heightTextFields by remember { mutableStateOf(55.dp) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -78,6 +80,8 @@ fun AutocompleteTextField(
             )
         },
         trailingIcon = {
+            if (isLoading)
+                CircularProgressIndicator()
             if (focusState.value && value.isNotEmpty()){
                 IconButton(onClick = { onValueChange("") }) {
                     Icon(imageVector = Icons.Default.Close,

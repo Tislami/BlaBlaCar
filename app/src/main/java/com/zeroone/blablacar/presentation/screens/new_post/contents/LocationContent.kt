@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
+import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
 import com.zeroone.blablacar.presentation.ui.components.AutocompleteTextField
 
 
@@ -23,6 +24,7 @@ fun LocationContent(
     textFieldLabelText: String,
     onTextFieldValueChange: (String) -> Unit,
     onTextFieldDone: (String) -> Unit,
+    newPostLoadingState: NewPostLoadingState,
     onMapLongClick: (LatLng) -> Unit,
     location: LatLng?
 ) {
@@ -40,7 +42,8 @@ fun LocationContent(
             labelText = textFieldLabelText,
             suggestions = suggestions,
             onSuggestionSelect = onTextFieldValueChange,
-            onDone = onTextFieldDone
+            isLoading = newPostLoadingState.autocompleteLoadingState,
+            onDone = onTextFieldDone,
         )
 
         Surface(

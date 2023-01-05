@@ -37,6 +37,7 @@ private fun NewPostScreen(
 ) {
     val scaffoldState = rememberScaffoldState()
     val newPostState = newPostViewModel.newPostState.value
+    val newPostLoadingState = newPostViewModel.newPostLoadingState.value
     val contentState = remember { mutableStateOf(NewPostContentState.From) }
 
 
@@ -50,10 +51,13 @@ private fun NewPostScreen(
         }
     }
 
+
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             NewPostTopAppBar(
+                newPostLoadingState= newPostLoadingState,
                 navigationIcon = Icons.Default.Close,
                 actionButtonIcon = Icons.Default.ArrowForward,
                 onNavigationClick = onNavigationClick,
@@ -71,15 +75,23 @@ private fun NewPostScreen(
                         }
                     }
                 },
-                actionButtonVisible = newPostState.fromLocation != null
+                actionButtonVisible = when (contentState.value) {
+                    NewPostContentState.From -> {
+                        newPostState.fromLocation!=null                    }
+                    NewPostContentState.To -> {
+                        newPostState.toLocation!=null
+                    }
+                    else -> {false}
+                }
             )
         },
         content = { innerPadding ->
             NewPostContent(
-                modifier.padding(innerPadding),
-                contentState,
-                newPostState,
-                newPostViewModel
+                modifier = modifier.padding(innerPadding),
+                contentState = contentState.value,
+                newPostState = newPostState,
+                newPostLoadingState = newPostLoadingState,
+                newPostViewModel = newPostViewModel
             )
         }
     )
@@ -88,11 +100,12 @@ private fun NewPostScreen(
 @Composable
 private fun NewPostContent(
     modifier: Modifier,
-    contentState: MutableState<NewPostContentState>,
+    contentState: NewPostContentState,
     newPostState: NewPostState,
+    newPostLoadingState: NewPostLoadingState,
     newPostViewModel: NewPostViewModel
 ) {
-    when (contentState.value) {
+    when (contentState) {
         NewPostContentState.From -> {
             LocationContent(
                 modifier = modifier,
@@ -112,6 +125,7 @@ private fun NewPostContent(
                         locationState = LocationState.From
                     )
                 },
+                newPostLoadingState = newPostLoadingState,
                 onMapLongClick = newPostViewModel::getReverseLocation,
                 location = newPostState.fromLocation
             )
@@ -135,6 +149,7 @@ private fun NewPostContent(
                         locationState = LocationState.To
                     )
                 },
+                newPostLoadingState = newPostLoadingState,
                 onMapLongClick = newPostViewModel::getReverseLocation,
                 location = newPostState.toLocation
             )
