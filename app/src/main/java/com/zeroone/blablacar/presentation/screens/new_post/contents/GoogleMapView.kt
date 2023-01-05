@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.posts.contents
+package com.zeroone.blablacar.presentation.screens.new_post.contents
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*

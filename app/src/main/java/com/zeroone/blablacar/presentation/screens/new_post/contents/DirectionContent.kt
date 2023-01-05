@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.posts.contents
+package com.zeroone.blablacar.presentation.screens.new_post.contents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,18 +7,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
-import com.zeroone.blablacar.domain.model.google_map.direction.Direction
+import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 
 
 @Composable
 fun DirectionContent(
     modifier: Modifier = Modifier,
-    fromLocation: LatLng?,
-    toLocation: LatLng?,
-    direction: Direction? = null,
+    newPostState: NewPostState,
     onPolyLineOnClick: (List<LatLng>) -> Unit,
 ) {
 
@@ -34,9 +31,9 @@ fun DirectionContent(
             shape = MaterialTheme.shapes.medium,
         ) {
             GoogleMapView(
-                fromLocation = fromLocation,
-                toLocation = toLocation,
-                direction = direction,
+                fromLocation = newPostState.fromLocation,
+                toLocation = newPostState.toLocation,
+                direction = newPostState.direction,
                 onPolyLineOnClick = onPolyLineOnClick
             )
         }
@@ -47,8 +44,8 @@ fun DirectionContent(
             shape = MaterialTheme.shapes.medium,
         ) {
             LazyColumn {
-                if (direction != null) {
-                    items(direction.routes) {
+                if (newPostState.direction != null) {
+                    items(newPostState.direction.routes) {
                         IconToggleButton(checked = true, onCheckedChange = {}) {
                             Text(text = it.summary)
                         }

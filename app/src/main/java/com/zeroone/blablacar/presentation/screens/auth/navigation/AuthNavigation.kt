@@ -2,10 +2,12 @@ package com.zeroone.blablacar.presentation.screens.auth.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
+import com.zeroone.blablacar.presentation.screens.auth.AuthViewModel
 import com.zeroone.blablacar.presentation.screens.auth.IntroScreen
 import com.zeroone.blablacar.presentation.screens.auth.login.LoginRoute
 import com.zeroone.blablacar.presentation.screens.auth.registration.RegistrationRoute
@@ -34,7 +36,7 @@ fun NavGraphBuilder.authNavigation(
         {
             RegistrationRoute(
                 modifier = modifier,
-                backOnClick = { navController.popBackStack() }
+                backOnClick = { navController.popBackStack() },
             )
         }
 

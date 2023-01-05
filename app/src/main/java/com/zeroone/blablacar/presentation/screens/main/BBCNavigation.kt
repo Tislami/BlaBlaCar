@@ -12,7 +12,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
 import com.zeroone.blablacar.presentation.screens.home.HomeRoute
-import com.zeroone.blablacar.presentation.screens.posts.NewPostRoute
+import com.zeroone.blablacar.presentation.screens.new_post.NewPostRoute
 import com.zeroone.blablacar.presentation.screens.user.profile.ProfileRoute
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 

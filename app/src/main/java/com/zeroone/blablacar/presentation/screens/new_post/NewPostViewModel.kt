@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.posts.google_maps
+package com.zeroone.blablacar.presentation.screens.new_post
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GoogleMapsApiViewModel @Inject constructor(
+class NewPostViewModel @Inject constructor(
     private val googleMapsApiRepository: GoogleMapsApiRepository
 ) :
     ViewModel() {

@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.posts
+package com.zeroone.blablacar.presentation.screens.new_post
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon

@@ -1,9 +1,7 @@
-package com.zeroone.blablacar.presentation.screens.posts.google_maps
+package com.zeroone.blablacar.presentation.screens.new_post
 
 import com.google.android.gms.maps.model.LatLng
 import com.zeroone.blablacar.domain.model.google_map.direction.Direction
-import com.zeroone.blablacar.domain.model.google_map.geo_place.autocomplete.Autocomplete
-import com.zeroone.blablacar.domain.model.google_map.geo_place.find_place.FindPlace
 import com.zeroone.blablacar.domain.model.google_map.geocoding.Geocoding
 import com.zeroone.blablacar.domain.model.google_map.reverse_geocoding.ReverseGeocoding
 
