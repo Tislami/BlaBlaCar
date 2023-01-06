@@ -32,6 +32,30 @@ class NewPostViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<NewPostUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    fun setLocationTextValue(value: String, locationState: LocationState) {
+        when (locationState) {
+            LocationState.From -> {
+                newPostState.value = newPostState.value.copy(
+                    fromLocationText = value,
+                    fromLocation = null
+                )
+            }
+            LocationState.To -> {
+                newPostState.value = newPostState.value.copy(
+                    toLocationText = value,
+                    toLocation = null
+                )
+            }
+            LocationState.NewLocation -> {
+                newPostState.value = newPostState.value.copy(
+                    newLocationText = value,
+                    newLocation = null
+                )
+            }
+        }
+        autocomplete(value)
+    }
+
     private var autocompleteJob: Job? = null
     private fun autocomplete(input: String) {
         autocompleteJob?.cancel()
@@ -67,18 +91,13 @@ class NewPostViewModel @Inject constructor(
     fun getDirection() {
         val destination = newPostState.value.toLocation
         val origin = newPostState.value.fromLocation
-
         if (destination != null && origin != null) {
-
             var waypoints = ""
             if (newPostState.value.waypoints.isNotEmpty()) {
                 newPostState.value.waypoints.onEach {
                     waypoints += "place_id:${it.key}|"
                 }
             }
-
-            Log.d("NewPostTag", "getDirection: $waypoints     ${newPostState.value.waypoints.size}")
-
             viewModelScope.launch {
                 googleMapsApiRepository.getDirection(
                     destination = "${destination.latitude},${destination.longitude}",
@@ -240,29 +259,6 @@ class NewPostViewModel @Inject constructor(
         }
     }
 
-    fun setLocationTextValue(value: String, locationState: LocationState) {
-        when (locationState) {
-            LocationState.From -> {
-                newPostState.value = newPostState.value.copy(
-                    fromLocationText = value,
-                    fromLocation = null
-                )
-            }
-            LocationState.To -> {
-                newPostState.value = newPostState.value.copy(
-                    toLocationText = value,
-                    toLocation = null
-                )
-            }
-            LocationState.NewLocation -> {
-                newPostState.value = newPostState.value.copy(
-                    newLocationText = value,
-                    newLocation = null
-                )
-            }
-        }
-        autocomplete(value)
-    }
 
     sealed class NewPostUiEvent {
         data class ShowSnackBar(val message: String) : NewPostUiEvent()

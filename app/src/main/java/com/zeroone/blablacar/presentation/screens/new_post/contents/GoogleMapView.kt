@@ -1,13 +1,14 @@
 package com.zeroone.blablacar.presentation.screens.new_post.contents
 
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
-import com.zeroone.blablacar.domain.model.google_map.direction.Direction
 import com.zeroone.blablacar.domain.model.google_map.direction.Route
+import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 import com.zeroone.blablacar.utils.decodePoly
 
@@ -49,12 +50,14 @@ fun GoogleMapView(
 @Composable
 fun GoogleMapView(
     newPostState: NewPostState,
-    onPolyLineOnClick : (Route)-> Unit,
-    ) {
-    if (newPostState.direction != null && newPostState.fromLocation!=null && newPostState.toLocation!=null) {
+    onPolyLineOnClick: (Route) -> Unit,
+) {
+    if (newPostState.direction != null && newPostState.fromLocation != null && newPostState.toLocation != null) {
 
         val cameraPositionState =
-            rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(newPostState.fromLocation, 6f) }
+            rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(newPostState.fromLocation, 6f)
+            }
         val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
         val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
 
@@ -70,7 +73,6 @@ fun GoogleMapView(
                 newPostState.toLocation.longitude
             )
         )
-
         GoogleMap(
             modifier = Modifier,
             cameraPositionState = cameraPositionState,
@@ -80,8 +82,8 @@ fun GoogleMapView(
             Marker(state = fromMarkerState)
             Marker(state = toMarkerState)
 
-            newPostState.waypoints.values.onEach { location->
-                if (location!=null){
+            newPostState.waypoints.values.onEach { location ->
+                if (location != null) {
                     val markerState = rememberMarkerState(
                         position = location
                     )

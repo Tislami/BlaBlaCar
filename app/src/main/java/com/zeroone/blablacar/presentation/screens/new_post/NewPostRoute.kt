@@ -14,6 +14,7 @@ import com.zeroone.blablacar.R
 import com.zeroone.blablacar.presentation.screens.main.Routes
 import com.zeroone.blablacar.presentation.screens.new_post.contents.DirectionContent
 import com.zeroone.blablacar.presentation.screens.new_post.contents.LocationContent
+import com.zeroone.blablacar.presentation.ui.components.Loading
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -39,6 +40,8 @@ private fun NewPostScreen(
     val newPostState = newPostViewModel.newPostState.value
     val newPostLoadingState = newPostViewModel.newPostLoadingState.value
     val contentState = remember { mutableStateOf(NewPostContentState.From) }
+    var onActionButtonClick by remember { mutableStateOf({ }) }
+    var actionButtonVisible by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(key1 = true) {
@@ -47,52 +50,54 @@ private fun NewPostScreen(
                 is NewPostViewModel.NewPostUiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
+                NewPostViewModel.NewPostUiEvent.DirectionReady -> {
+
+                }
             }
         }
     }
 
+    when (contentState.value) {
+        NewPostContentState.From -> {
+            onActionButtonClick = {
+                contentState.value = NewPostContentState.To
+            }
+            actionButtonVisible = newPostState.fromLocation != null
+        }
+        NewPostContentState.To -> {
+            onActionButtonClick = {
+                newPostViewModel.getDirection()
+                contentState.value = NewPostContentState.Direction
+            }
+            actionButtonVisible = newPostState.toLocation != null
+        }
+        NewPostContentState.NewLocation -> {
+            onActionButtonClick = {
+                newPostViewModel.addWaypoint()
+                newPostViewModel.getDirection()
+                contentState.value = NewPostContentState.Direction
+            }
+            actionButtonVisible = newPostState.newLocation != null
+        }
+        NewPostContentState.Direction -> {
+            actionButtonVisible = newPostState.currentRoute != null
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             NewPostTopAppBar(
-                newPostLoadingState= newPostLoadingState,
+                newPostLoadingState = newPostLoadingState,
                 navigationIcon = Icons.Default.Close,
                 actionButtonIcon = Icons.Default.ArrowForward,
                 onNavigationClick = onNavigationClick,
-                onActionButtonClick = {
-                    when (contentState.value) {
-                        NewPostContentState.From -> {
-                            contentState.value = NewPostContentState.To
-                        }
-                        NewPostContentState.To -> {
-                            contentState.value = NewPostContentState.Direction
-                        }
-                        NewPostContentState.Direction -> {
-
-                        }
-                        NewPostContentState.NewLocation -> {
-                            newPostViewModel.addWaypoint()
-                            contentState.value = NewPostContentState.Direction
-                        }
-                    }
-                },
-                actionButtonVisible = when (contentState.value) {
-                    NewPostContentState.From -> {
-                        newPostState.fromLocation!=null                    }
-                    NewPostContentState.To -> {
-                        newPostState.toLocation!=null
-                    }
-                    NewPostContentState.NewLocation -> {
-                        newPostState.newLocation!=null
-                    }
-                    NewPostContentState.Direction -> {
-                        newPostState.currentRoute!=null
-                    }
-                }
+                onActionButtonClick = onActionButtonClick,
+                actionButtonVisible = actionButtonVisible,
             )
         },
         content = { innerPadding ->
+
             NewPostContent(
                 modifier = modifier.padding(innerPadding),
                 contentState = contentState,
@@ -165,10 +170,9 @@ private fun NewPostContent(
             DirectionContent(
                 modifier = modifier,
                 newPostState = newPostState,
-                newPostLoadingState = newPostLoadingState,
+                newPostLoadingState= newPostLoadingState,
                 onRouteSelect = newPostViewModel::getSelectedDirection,
                 onAddCityClick = { contentState.value = NewPostContentState.NewLocation },
-                getDirection = newPostViewModel::getDirection
             )
         }
         NewPostContentState.NewLocation -> {

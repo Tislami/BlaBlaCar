@@ -1,6 +1,5 @@
 package com.zeroone.blablacar.presentation.screens.new_post.contents
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.maps.model.LatLng
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.google_map.direction.Route
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
-import com.zeroone.blablacar.presentation.ui.components.BBCTextButton
+import com.zeroone.blablacar.presentation.ui.components.Loading
 
 
 @Composable
@@ -28,15 +26,14 @@ fun DirectionContent(
     newPostLoadingState: NewPostLoadingState,
     onRouteSelect: (Route) -> Unit,
     onAddCityClick: () -> Unit,
-    getDirection: () -> Unit,
 ) {
-    LaunchedEffect(key1 = true) { getDirection() }
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
     ) {
+        Loading(isLoading = newPostLoadingState.directionLoadingState)
+
         Surface(
             modifier = Modifier
                 .weight(1f)
@@ -93,8 +90,11 @@ private fun RouteItem(
             Text(text = route.summary)
             route.legs.onEach { leg ->
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top=4.dp,end = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp, end = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(
                         text = leg.distance.text,
                         color = MaterialTheme.colors.onSurface,
@@ -106,7 +106,14 @@ private fun RouteItem(
                         style = MaterialTheme.typography.button,
                     )
                 }
-
+            }
+            if (newPostState.waypoints.isNotEmpty()) {
+                var distanceValue = 0
+                var durationValue = 0
+                route.legs.onEach { leg ->
+                    distanceValue += leg.distance.value
+                    durationValue += leg.duration.value
+                }
             }
         }
     }

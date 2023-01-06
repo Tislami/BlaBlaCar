@@ -76,6 +76,5 @@ private fun NavHostController(
 object Graph {
     const val AUTHENTICATION = "AUTH"
     const val PROFILE = "PROFILE"
-    const val NEW_POST = "NEW_POST"
 }
 
