@@ -1,16 +1,22 @@
 package com.zeroone.blablacar.presentation.screens.new_post
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.zeroone.blablacar.domain.model.Response
+import com.zeroone.blablacar.domain.model.google_map.direction.Route
 import com.zeroone.blablacar.domain.repository.google_maps.GoogleMapsApiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+
+//Sheki : ChIJOavewsaHR0ARTJ8mOt92cKU
+//Agdam : ChIJux8yguSRPkARBxWipqpZS4I
 
 @HiltViewModel
 class NewPostViewModel @Inject constructor(
@@ -23,7 +29,7 @@ class NewPostViewModel @Inject constructor(
 
     val newPostLoadingState = mutableStateOf(NewPostLoadingState())
 
-    private val _eventFlow = MutableSharedFlow<GoogleMapsApiUiEvent>()
+    private val _eventFlow = MutableSharedFlow<NewPostUiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var autocompleteJob: Job? = null
@@ -35,7 +41,7 @@ class NewPostViewModel @Inject constructor(
                     is Response.Error -> {
                         newPostLoadingState.value =
                             newPostLoadingState.value.copy(autocompleteLoadingState = false)
-                        _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
+                        _eventFlow.emit(NewPostUiEvent.ShowSnackBar(response.message))
                     }
                     is Response.Loading -> {
                         newPostLoadingState.value =
@@ -62,39 +68,49 @@ class NewPostViewModel @Inject constructor(
         val destination = newPostState.value.toLocation
         val origin = newPostState.value.fromLocation
 
-        if (destination != null && origin != null)
+        if (destination != null && origin != null) {
+
+            var waypoints = ""
+            if (newPostState.value.waypoints.isNotEmpty()) {
+                newPostState.value.waypoints.onEach {
+                    waypoints += "place_id:${it.key}|"
+                }
+            }
+
+            Log.d("NewPostTag", "getDirection: $waypoints     ${newPostState.value.waypoints.size}")
+
             viewModelScope.launch {
                 googleMapsApiRepository.getDirection(
                     destination = "${destination.latitude},${destination.longitude}",
                     origin = "${origin.latitude},${origin.longitude}",
+                    waypoints = waypoints
                 ).collect { response ->
                     when (response) {
                         is Response.Error -> {
                             newPostLoadingState.value =
                                 newPostLoadingState.value.copy(directionLoadingState = false)
-                            _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
+                            _eventFlow.emit(NewPostUiEvent.ShowSnackBar(response.message))
                         }
                         is Response.Loading -> {
                             newPostLoadingState.value =
-                                newPostLoadingState.value.copy(autocompleteLoadingState = true)
+                                newPostLoadingState.value.copy(directionLoadingState = true)
                         }
                         is Response.Success -> {
-                            newPostState.value = newPostState.value.copy(direction = response.data)
+                            newPostState.value = newPostState.value.copy(
+                                direction = response.data,
+                                currentRoute = response.data.routes[0]
+                            )
                             newPostLoadingState.value =
                                 newPostLoadingState.value.copy(directionLoadingState = false)
                         }
                     }
                 }
             }
+        }
     }
 
-    fun getSelectedDirection(points: List<LatLng>) {
-        /*val temp  = mutableListOf(points)
-        newPostState.value.polyLinesPoints.map{
-            if (it!=points){ temp.add(it) }
-        }
-        newPostState.value = newPostState.value.copy(polyLinesPoints = temp)
-    */
+    fun getSelectedDirection(route: Route) {
+        newPostState.value = newPostState.value.copy(currentRoute = route)
     }
 
     fun getReverseLocation(latLng: LatLng) {
@@ -105,7 +121,7 @@ class NewPostViewModel @Inject constructor(
                     is Response.Error -> {
                         newPostLoadingState.value =
                             newPostLoadingState.value.copy(reverseLocationLoadingState = false)
-                        _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
+                        _eventFlow.emit(NewPostUiEvent.ShowSnackBar(response.message))
                     }
                     is Response.Loading -> {
                         newPostLoadingState.value =
@@ -139,7 +155,7 @@ class NewPostViewModel @Inject constructor(
                         is Response.Error -> {
                             newPostLoadingState.value =
                                 newPostLoadingState.value.copy(locationLoadingState = false)
-                            _eventFlow.emit(GoogleMapsApiUiEvent.ShowSnackBar(response.message))
+                            _eventFlow.emit(NewPostUiEvent.ShowSnackBar(response.message))
                         }
                         is Response.Loading -> {
                             newPostLoadingState.value =
@@ -148,10 +164,13 @@ class NewPostViewModel @Inject constructor(
                         is Response.Success -> {
                             newPostLoadingState.value =
                                 newPostLoadingState.value.copy(locationLoadingState = false)
-                            var location = LatLng(40.40144780549906, 49.85737692564726)
-                            response.data.results.map {
+
+                            var location: LatLng? = null
+                            var placeId = ""
+                            response.data.results.map {result->
+                                placeId=result.place_id
                                 location =
-                                    LatLng(it.geometry.location.lat, it.geometry.location.lng)
+                                    LatLng(result.geometry.location.lat, result.geometry.location.lng)
                             }
                             when (locationState) {
                                 LocationState.From -> {
@@ -168,13 +187,20 @@ class NewPostViewModel @Inject constructor(
                                             toLocation = location
                                         )
                                 }
+                                LocationState.NewLocation -> {
+                                    newPostState.value =
+                                        newPostState.value.copy(
+                                            geocoding = response.data,
+                                            newLocation = location,
+                                            newLocationPlaceId = placeId
+                                        )
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        else{
+        } else {
             when (locationState) {
                 LocationState.From -> {
                     newPostState.value =
@@ -188,7 +214,29 @@ class NewPostViewModel @Inject constructor(
                             toLocation = null
                         )
                 }
+                LocationState.NewLocation -> {
+                    newPostState.value =
+                        newPostState.value.copy(
+                            newLocation = null
+                        )
+                }
             }
+        }
+    }
+
+    fun addWaypoint() {
+        val placeId = newPostState.value.newLocationPlaceId
+        val location = newPostState.value.newLocation
+        if (placeId.isNotEmpty() && location != null) {
+            val waypoints = newPostState.value.waypoints
+            waypoints[placeId] = location
+
+            newPostState.value = newPostState.value.copy(
+                waypoints = waypoints,
+                newLocationPlaceId = "",
+                newLocation = null,
+                newLocationText = ""
+            )
         }
     }
 
@@ -206,11 +254,18 @@ class NewPostViewModel @Inject constructor(
                     toLocation = null
                 )
             }
+            LocationState.NewLocation -> {
+                newPostState.value = newPostState.value.copy(
+                    newLocationText = value,
+                    newLocation = null
+                )
+            }
         }
         autocomplete(value)
     }
 
-    sealed class GoogleMapsApiUiEvent {
-        data class ShowSnackBar(val message: String) : GoogleMapsApiUiEvent()
+    sealed class NewPostUiEvent {
+        data class ShowSnackBar(val message: String) : NewPostUiEvent()
+        object DirectionReady : NewPostUiEvent()
     }
 }

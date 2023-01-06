@@ -13,14 +13,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BBCTextButton(
+    modifier: Modifier=Modifier,
     text: String,
     onClick: () -> Unit,
 ) {
-    TextButton(onClick = onClick) {
-        Text(
-            text = text,
-            color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.button,
-        )
+    TextButton(
+        modifier=modifier,
+        onClick = onClick) {
+
     }
 }

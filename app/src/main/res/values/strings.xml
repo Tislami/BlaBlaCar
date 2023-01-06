@@ -60,7 +60,11 @@
     <string name="location_and_date"> Location &amp; Date</string>
     <string name="from"> From </string>
     <string name="where_are_you_going_from"> Where are you going from? </string>
+    <string name="add_city"> Add city </string>
+    <string name="click_for_add_city"> Click for add city </string>
     <string name="where_are_you_going_to"> Where are you going to? </string>
+    <string name="add_new_location"> Add new location </string>
+    <string name="new_location"> New location </string>
     <string name="to"> To </string>
     <string name="date"> Date </string>
     <string name="time"> Time </string>

@@ -8,6 +8,7 @@ import com.zeroone.blablacar.data.remote.google_maps.geo_place.AutocompleteApi
 import com.zeroone.blablacar.data.remote.google_maps.geo_place.FindPlaceApi
 import com.zeroone.blablacar.domain.model.Response
 import com.zeroone.blablacar.domain.model.google_map.direction.Direction
+import com.zeroone.blablacar.domain.model.google_map.direction.GeocodedWaypoint
 import com.zeroone.blablacar.domain.model.google_map.geo_place.autocomplete.Autocomplete
 import com.zeroone.blablacar.domain.model.google_map.geo_place.find_place.FindPlace
 import com.zeroone.blablacar.domain.model.google_map.geocoding.Geocoding
@@ -20,7 +21,7 @@ import java.net.SocketTimeoutException
 interface GoogleMapsApiRepository {
     suspend fun autocomplete(input: String): Flow<Response<Autocomplete>>
     suspend fun findPlace(input: String): Flow<Response<FindPlace>>
-    suspend fun getDirection(destination: String,origin: String): Flow<Response<Direction>>
+    suspend fun getDirection(destination: String,origin: String,waypoints: String): Flow<Response<Direction>>
     suspend fun getReverseLocation(latLng: String): Flow<Response<ReverseGeocoding>>
     suspend fun getLocation(placeId: String): Flow<Response<Geocoding>>
 }
@@ -40,9 +41,9 @@ class GoogleMapsApiRepositoryImpl(
             emit(Response.Success(data))
 
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in autocomplete: ${e.message}"))
         } catch (e: SocketTimeoutException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in autocomplete: ${e.message}"))
         }
     }
 
@@ -53,22 +54,30 @@ class GoogleMapsApiRepositoryImpl(
             emit(Response.Success(data))
 
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in findPlace: ${e.message}"))
         } catch (e: SocketTimeoutException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in findPlace: ${e.message}"))
         }
     }
 
-    override suspend fun getDirection(destination: String, origin: String)= flow {
+    override suspend fun getDirection(
+        destination: String,
+        origin: String,
+        waypoints: String
+    )= flow {
         emit(Response.Loading)
         try {
-            val data = directionApi.getDirection(destination = destination, origin= origin)
+            val data = directionApi.getDirection(
+                destination = destination,
+                origin= origin,
+                waypoints = waypoints
+            )
             emit(Response.Success(data))
 
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getDirection: ${e.message}"))
         } catch (e: SocketTimeoutException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getDirection: ${e.message}"))
         }
     }
 
@@ -78,9 +87,9 @@ class GoogleMapsApiRepositoryImpl(
             val data = reverseGeocodingApi.getLocation(latLng)
             emit(Response.Success(data))
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getReverseLocation: ${e.message}"))
         } catch (e: SocketTimeoutException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getReverseLocation: ${e.message}"))
         }
     }
 
@@ -90,9 +99,9 @@ class GoogleMapsApiRepositoryImpl(
             val data = geocodingApi.getLocation(placeId)
             emit(Response.Success(data))
         } catch (e: HttpException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getLocation: ${e.message}"))
         } catch (e: SocketTimeoutException) {
-            emit(Response.Error("Oops something is wrong ${e.message}"))
+            emit(Response.Error("Oops something is wrong in getLocation: ${e.message}"))
         }
     }
 

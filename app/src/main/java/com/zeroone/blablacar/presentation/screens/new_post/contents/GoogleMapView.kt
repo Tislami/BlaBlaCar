@@ -4,11 +4,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.google.android.gms.maps.model.ButtCap
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 import com.zeroone.blablacar.domain.model.google_map.direction.Direction
+import com.zeroone.blablacar.domain.model.google_map.direction.Route
+import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 import com.zeroone.blablacar.utils.decodePoly
 
 
@@ -17,7 +17,6 @@ fun GoogleMapView(
     location: LatLng?,
     onMapLongClick: (LatLng) -> Unit,
 ) {
-
     val baku = LatLng(40.40144780549906, 49.85737692564726)
     val cameraPositionState =
         rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(baku, 6f) }
@@ -49,30 +48,26 @@ fun GoogleMapView(
 
 @Composable
 fun GoogleMapView(
-    fromLocation: LatLng?,
-    toLocation: LatLng?,
-    direction: Direction? = null,
-    onPolyLineOnClick : (List<LatLng>)-> Unit,
+    newPostState: NewPostState,
+    onPolyLineOnClick : (Route)-> Unit,
     ) {
-    if (direction != null && fromLocation!=null && toLocation!=null) {
+    if (newPostState.direction != null && newPostState.fromLocation!=null && newPostState.toLocation!=null) {
 
         val cameraPositionState =
-            rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(fromLocation, 6f) }
+            rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(newPostState.fromLocation, 6f) }
         val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
         val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
-        val width by remember { mutableStateOf(15.0f) }
-        val zIndex by remember { mutableStateOf(15.0f) }
 
         val fromMarkerState = rememberMarkerState(
             position = LatLng(
-                fromLocation.latitude,
-                fromLocation.longitude
+                newPostState.fromLocation.latitude,
+                newPostState.fromLocation.longitude
             )
         )
         val toMarkerState = rememberMarkerState(
             position = LatLng(
-                toLocation.latitude,
-                toLocation.longitude
+                newPostState.toLocation.latitude,
+                newPostState.toLocation.longitude
             )
         )
 
@@ -85,15 +80,26 @@ fun GoogleMapView(
             Marker(state = fromMarkerState)
             Marker(state = toMarkerState)
 
-            direction.routes.onEachIndexed { index, route ->
+            newPostState.waypoints.values.onEach { location->
+                if (location!=null){
+                    val markerState = rememberMarkerState(
+                        position = location
+                    )
+                    Marker(
+                        state = markerState,
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
+                    )
+                }
+            }
+
+            newPostState.direction.routes.onEach { route ->
                 Polyline(
-                    color = if (index == 0) MaterialTheme.colors.primary else Color.Gray,
+                    color = if (route == newPostState.currentRoute) MaterialTheme.colors.primary else Color.Gray,
                     points = decodePoly(route.overview_polyline.points),
-                    endCap = ButtCap(),
-                    width = width,
-                    zIndex = if (index == 0) 11.0f else 10.0f,
+                    width = 15f,
+                    zIndex = if (route == newPostState.currentRoute) 11.0f else 10.0f,
                     clickable = true,
-                    onClick = { onPolyLineOnClick(it.points) }
+                    onClick = { onPolyLineOnClick(route) }
                 )
             }
         }

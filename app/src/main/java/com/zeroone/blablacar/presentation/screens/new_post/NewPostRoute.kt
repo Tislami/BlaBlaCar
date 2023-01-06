@@ -44,13 +44,12 @@ private fun NewPostScreen(
     LaunchedEffect(key1 = true) {
         newPostViewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is NewPostViewModel.GoogleMapsApiUiEvent.ShowSnackBar -> {
+                is NewPostViewModel.NewPostUiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
             }
         }
     }
-
 
 
     Scaffold(
@@ -68,10 +67,13 @@ private fun NewPostScreen(
                         }
                         NewPostContentState.To -> {
                             contentState.value = NewPostContentState.Direction
-
                         }
                         NewPostContentState.Direction -> {
 
+                        }
+                        NewPostContentState.NewLocation -> {
+                            newPostViewModel.addWaypoint()
+                            contentState.value = NewPostContentState.Direction
                         }
                     }
                 },
@@ -81,14 +83,19 @@ private fun NewPostScreen(
                     NewPostContentState.To -> {
                         newPostState.toLocation!=null
                     }
-                    else -> {false}
+                    NewPostContentState.NewLocation -> {
+                        newPostState.newLocation!=null
+                    }
+                    NewPostContentState.Direction -> {
+                        newPostState.currentRoute!=null
+                    }
                 }
             )
         },
         content = { innerPadding ->
             NewPostContent(
                 modifier = modifier.padding(innerPadding),
-                contentState = contentState.value,
+                contentState = contentState,
                 newPostState = newPostState,
                 newPostLoadingState = newPostLoadingState,
                 newPostViewModel = newPostViewModel
@@ -100,12 +107,12 @@ private fun NewPostScreen(
 @Composable
 private fun NewPostContent(
     modifier: Modifier,
-    contentState: NewPostContentState,
+    contentState: MutableState<NewPostContentState>,
     newPostState: NewPostState,
     newPostLoadingState: NewPostLoadingState,
     newPostViewModel: NewPostViewModel
 ) {
-    when (contentState) {
+    when (contentState.value) {
         NewPostContentState.From -> {
             LocationContent(
                 modifier = modifier,
@@ -155,11 +162,37 @@ private fun NewPostContent(
             )
         }
         NewPostContentState.Direction -> {
-            newPostViewModel.getDirection()
             DirectionContent(
                 modifier = modifier,
                 newPostState = newPostState,
-                onPolyLineOnClick = newPostViewModel::getSelectedDirection
+                newPostLoadingState = newPostLoadingState,
+                onRouteSelect = newPostViewModel::getSelectedDirection,
+                onAddCityClick = { contentState.value = NewPostContentState.NewLocation },
+                getDirection = newPostViewModel::getDirection
+            )
+        }
+        NewPostContentState.NewLocation -> {
+            LocationContent(
+                modifier = modifier,
+                title = stringResource(id = R.string.add_new_location),
+                suggestions = newPostState.suggestions.map { it.key },
+                textFieldValue = newPostState.newLocationText,
+                textFieldLabelText = stringResource(id = R.string.new_location),
+                onTextFieldValueChange = {
+                    newPostViewModel.setLocationTextValue(
+                        value = it,
+                        locationState = LocationState.NewLocation
+                    )
+                },
+                onTextFieldDone = {
+                    newPostViewModel.getLocation(
+                        placeId = newPostState.suggestions[it],
+                        locationState = LocationState.NewLocation
+                    )
+                },
+                newPostLoadingState = newPostLoadingState,
+                onMapLongClick = newPostViewModel::getReverseLocation,
+                location = newPostState.newLocation
             )
         }
     }
@@ -169,5 +202,6 @@ private fun NewPostContent(
 enum class NewPostContentState {
     From,
     To,
+    NewLocation,
     Direction
 }

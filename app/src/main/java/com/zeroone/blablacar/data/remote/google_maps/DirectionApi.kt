@@ -10,9 +10,10 @@ interface DirectionApi {
     suspend fun getDirection(
         @Query("destination") destination: String,
         @Query("origin") origin: String,
+        @Query("waypoints") waypoints: String,
         @Query("alternatives") alternatives: Boolean = true,
-        @Query("mode") mode: String = "driving",
-        @Query("region") region: String="az",
+        @Query("mode") mode: String = "DRIVING",
+        @Query("region") region: String="AZ",
         @Query("key") key :String= GOOGLE_MAPS_API_KEY
     ) : Direction
 }
