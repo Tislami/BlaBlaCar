@@ -58,7 +58,9 @@ fun BBCBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    if (currentDestination?.route !=Routes.NewPost.route) {
+    if (currentDestination?.route !=Routes.NewPost.route &&
+        currentDestination?.route !=Routes.ExpandedPost.route
+    ) {
         BottomNavigation(backgroundColor = MaterialTheme.colors.background) {
             items.forEach { item ->
                 BottomNavigationItem(

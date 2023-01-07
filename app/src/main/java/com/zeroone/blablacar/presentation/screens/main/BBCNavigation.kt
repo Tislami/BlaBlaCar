@@ -11,6 +11,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
+import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPostRoute
 import com.zeroone.blablacar.presentation.screens.home.HomeRoute
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostRoute
 import com.zeroone.blablacar.presentation.screens.user.profile.ProfileRoute
@@ -45,7 +46,7 @@ private fun NavHostController(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Routes.Home.route,
+        startDestination = Routes.ExpandedPost.route,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
@@ -66,9 +67,15 @@ private fun NavHostController(
                 navController= navController,
             )
         }
+        composable(Routes.NewPost.route) {
+            NewPostRoute(
+                modifier = modifier,
+                navController= navController,
+            )
+        }
 
-        composable(Routes.Profile.route) {
-            ProfileRoute(modifier = modifier)
+        composable(Routes.ExpandedPost.route) {
+           ExpandedPostRoute(modifier = modifier)
         }
     }
 }

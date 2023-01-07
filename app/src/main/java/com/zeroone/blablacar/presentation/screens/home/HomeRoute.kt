@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.Post2
+import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPostRoute
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
 import com.zeroone.blablacar.presentation.ui.cards.PostCard

@@ -16,7 +16,7 @@ import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.google_map.direction.Route
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
-import com.zeroone.blablacar.presentation.ui.components.Loading
+import com.zeroone.blablacar.presentation.ui.Loading
 
 
 @Composable

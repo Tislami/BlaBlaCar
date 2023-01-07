@@ -88,7 +88,7 @@ private fun LocationField(locationName: String) {
     ) {
 
         Icon(
-            painter = painterResource(id = R.drawable.location_icon),
+            painter = painterResource(id = R.drawable.location_icon_24),
             contentDescription = null,
             tint = MaterialTheme.colors.onBackground
         )
