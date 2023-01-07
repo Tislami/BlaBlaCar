@@ -1,9 +1,6 @@
 package com.zeroone.blablacar.presentation.ui.cards
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,24 +12,20 @@ import androidx.compose.runtime.*
 import com.zeroone.blablacar.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.zeroone.blablacar.domain.model.Post
+import com.zeroone.blablacar.domain.model.Post2
 import com.zeroone.blablacar.domain.model.User
+import com.zeroone.blablacar.domain.model.defaultUser
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
 @Composable
 fun PostCard(
-    post: Post,
+    post: Post2,
     onClick: () -> Unit,
 ) {
     Card(
@@ -44,12 +37,12 @@ fun PostCard(
         elevation = 8.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Title(post.date + post.time, post.price)
+            Title("${post.date} , ${post.time}", post.price)
             Spacer(modifier = Modifier.height(16.dp))
-            LocationField(post.from)
-            LocationField(post.to)
+            LocationField(post.fromAddress)
+            LocationField(post.toAddress)
             Spacer(modifier = Modifier.height(16.dp))
-            UserField(post.user)
+            UserField(defaultUser)
             CustomerCount(post)
         }
     }
@@ -86,7 +79,6 @@ private fun Title(dateTime: String, price: Float) {
         }
     }
 }
-
 
 @Composable
 private fun LocationField(locationName: String) {
@@ -146,24 +138,24 @@ private fun UserField(user: User) {
 }
 
 @Composable
-private fun CustomerCount(post: Post) {
+private fun CustomerCount(post: Post2) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.Bottom
     ) {
-        if (post.customerCount > 4) {
+        if (post.personCount > 4) {
             Icon(
                 imageVector = Icons.Default.Person,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = post.customerCount.toString(),
+                text = post.personCount.toString(),
                 fontSize = 16.sp
             )
         } else {
-            repeat(post.customerCount) {
+            repeat(post.personCount) {
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,

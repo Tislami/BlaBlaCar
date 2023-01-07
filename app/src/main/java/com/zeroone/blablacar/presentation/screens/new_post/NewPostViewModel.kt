@@ -5,9 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
+import com.zeroone.blablacar.domain.model.Post2
 import com.zeroone.blablacar.domain.model.Response
 import com.zeroone.blablacar.domain.model.google_map.direction.Route
+import com.zeroone.blablacar.domain.model.google_map.geocoding.AddressComponent
+import com.zeroone.blablacar.domain.repository.PostRepository
 import com.zeroone.blablacar.domain.repository.google_maps.GoogleMapsApiRepository
+import com.zeroone.blablacar.utils.decodePoly
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -20,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewPostViewModel @Inject constructor(
-    private val googleMapsApiRepository: GoogleMapsApiRepository
+    private val googleMapsApiRepository: GoogleMapsApiRepository,
+    private val postRepository: PostRepository
 ) :
     ViewModel() {
 
@@ -115,12 +120,18 @@ class NewPostViewModel @Inject constructor(
                                 newPostLoadingState.value.copy(directionLoadingState = true)
                         }
                         is Response.Success -> {
-                            newPostState.value = newPostState.value.copy(
-                                direction = response.data,
-                                currentRoute = response.data.routes[0]
-                            )
                             newPostLoadingState.value =
                                 newPostLoadingState.value.copy(directionLoadingState = false)
+
+                            if (response.data.routes.isEmpty()){
+                                _eventFlow.emit(NewPostUiEvent.ShowSnackBar("Direction alınamadı geri dönün"))
+
+                            }
+                            else{
+                                newPostState.value = newPostState.value.copy(
+                                    direction = response.data,
+                                    currentRoute = response.data.routes[0])
+                            }
                         }
                     }
                 }
@@ -259,9 +270,72 @@ class NewPostViewModel @Inject constructor(
         }
     }
 
+    fun setDate(date: String){
+        newPostState.value = newPostState.value.copy(
+            date = date
+        )
+    }
+    fun setTime(time: String){
+        newPostState.value = newPostState.value.copy(
+            time = time
+        )
+    }
+    fun setPersonCount(value: Int){
+        var count = newPostState.value.personCount
+        count+=value
+        newPostState.value = newPostState.value.copy(
+            personCount = count
+        )
+    }
+    fun setPrice(value: Int){
+        var price = newPostState.value.price
+        price+=value
+        newPostState.value = newPostState.value.copy(
+            price = price
+        )
+    }
+
+
+    fun addNewPost(){
+
+        val post = Post2(
+            fromAddress = newPostState.value.fromLocationText,
+            toAddress = newPostState.value.toLocationText,
+            points = newPostState.value.currentRoute?.overview_polyline?.points,
+            date = newPostState.value.date,
+            time = newPostState.value.time,
+            personCount = newPostState.value.personCount,
+            price = newPostState.value.price.toFloat()
+        )
+
+        viewModelScope.launch {
+            postRepository.newPost(post).collect{response->
+                when(response){
+                    is Response.Error -> {
+                        newPostLoadingState.value = newPostLoadingState.value.copy(
+                            adLoading = false
+                        )
+                        _eventFlow.emit(NewPostUiEvent.ShowSnackBar(response.message))
+                    }
+                    Response.Loading -> {
+                        newPostLoadingState.value = newPostLoadingState.value.copy(
+                            adLoading = true
+                        )
+                    }
+                    is Response.Success -> {
+                        newPostLoadingState.value = newPostLoadingState.value.copy(
+                            adLoading = false
+                        )
+                        _eventFlow.emit(NewPostUiEvent.PostAdded)
+                    }
+                }
+            }
+        }
+    }
+
 
     sealed class NewPostUiEvent {
         data class ShowSnackBar(val message: String) : NewPostUiEvent()
-        object DirectionReady : NewPostUiEvent()
+        object PostAdded : NewPostUiEvent()
     }
 }

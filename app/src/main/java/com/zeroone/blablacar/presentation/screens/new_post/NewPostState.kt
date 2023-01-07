@@ -21,6 +21,10 @@ data class NewPostState(
     val toLocationText: String = "",
     val newLocationText: String = "",
     val newLocationPlaceId: String = "",
+    val date : String="",
+    val time : String="",
+    val personCount : Int=0,
+    val price : Int=0,
 )
 
 data class NewPostLoadingState(
@@ -28,6 +32,7 @@ data class NewPostLoadingState(
     val reverseLocationLoadingState: Boolean=false,
     val autocompleteLoadingState: Boolean=false,
     val directionLoadingState: Boolean=false,
+    val adLoading: Boolean=false,
 )
 
 enum class LocationState{

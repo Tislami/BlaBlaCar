@@ -1,20 +1,25 @@
 package com.zeroone.blablacar.presentation.screens.new_post
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.zeroone.blablacar.R
+import com.zeroone.blablacar.domain.model.Post2
 import com.zeroone.blablacar.presentation.screens.main.Routes
+import com.zeroone.blablacar.presentation.screens.new_post.contents.DateTimePeronPriceContent
 import com.zeroone.blablacar.presentation.screens.new_post.contents.DirectionContent
 import com.zeroone.blablacar.presentation.screens.new_post.contents.LocationContent
-import com.zeroone.blablacar.presentation.ui.components.Loading
+import com.zeroone.blablacar.presentation.ui.Loading
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -26,6 +31,7 @@ fun NewPostRoute(
     NewPostScreen(
         modifier = modifier,
         newPostViewModel = newPostViewModel,
+        navigateToHome = {navController.navigate(Routes.Home.route)},
         onNavigationClick = { navController.navigate(Routes.Home.route) }
     )
 }
@@ -34,14 +40,18 @@ fun NewPostRoute(
 private fun NewPostScreen(
     modifier: Modifier = Modifier,
     newPostViewModel: NewPostViewModel,
+    navigateToHome : ()->Unit,
     onNavigationClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val newPostState = newPostViewModel.newPostState.value
     val newPostLoadingState = newPostViewModel.newPostLoadingState.value
     val contentState = remember { mutableStateOf(NewPostContentState.From) }
     var onActionButtonClick by remember { mutableStateOf({ }) }
+    var onNavigationButtonClick by remember { mutableStateOf({ }) }
     var actionButtonVisible by remember { mutableStateOf(false) }
+    var navigationIcon by remember { mutableStateOf(Icons.Default.Close) }
 
 
     LaunchedEffect(key1 = true) {
@@ -50,8 +60,9 @@ private fun NewPostScreen(
                 is NewPostViewModel.NewPostUiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
-                NewPostViewModel.NewPostUiEvent.DirectionReady -> {
-
+                NewPostViewModel.NewPostUiEvent.PostAdded -> {
+                    Toast.makeText(context,"Post added",Toast.LENGTH_LONG).show()
+                    navigateToHome()
                 }
             }
         }
@@ -59,9 +70,13 @@ private fun NewPostScreen(
 
     when (contentState.value) {
         NewPostContentState.From -> {
+            onNavigationButtonClick = {
+                onNavigationClick()
+            }
             onActionButtonClick = {
                 contentState.value = NewPostContentState.To
             }
+            navigationIcon = Icons.Default.Close
             actionButtonVisible = newPostState.fromLocation != null
         }
         NewPostContentState.To -> {
@@ -69,6 +84,10 @@ private fun NewPostScreen(
                 newPostViewModel.getDirection()
                 contentState.value = NewPostContentState.Direction
             }
+            onNavigationButtonClick = {
+                contentState.value = NewPostContentState.From
+            }
+            navigationIcon = Icons.Default.ArrowBack
             actionButtonVisible = newPostState.toLocation != null
         }
         NewPostContentState.NewLocation -> {
@@ -77,10 +96,31 @@ private fun NewPostScreen(
                 newPostViewModel.getDirection()
                 contentState.value = NewPostContentState.Direction
             }
+            onNavigationButtonClick = {
+                contentState.value = NewPostContentState.Direction
+            }
             actionButtonVisible = newPostState.newLocation != null
         }
         NewPostContentState.Direction -> {
             actionButtonVisible = newPostState.currentRoute != null
+            onActionButtonClick = {
+                contentState.value = NewPostContentState.DateTimePersonPrice
+            }
+            onNavigationButtonClick = {
+                contentState.value = NewPostContentState.To
+            }
+        }
+        NewPostContentState.DateTimePersonPrice -> {
+            onActionButtonClick = { newPostViewModel.addNewPost()}
+            onNavigationButtonClick = {
+                contentState.value = NewPostContentState.Direction
+            }
+
+            actionButtonVisible = (newPostState.date.isNotEmpty() &&
+                    newPostState.time.isNotEmpty() &&
+                    newPostState.personCount > 0 &&
+                    newPostState.price > 0
+                    )
         }
     }
 
@@ -89,15 +129,14 @@ private fun NewPostScreen(
         topBar = {
             NewPostTopAppBar(
                 newPostLoadingState = newPostLoadingState,
-                navigationIcon = Icons.Default.Close,
+                navigationIcon = navigationIcon,
                 actionButtonIcon = Icons.Default.ArrowForward,
-                onNavigationClick = onNavigationClick,
+                onNavigationClick = onNavigationButtonClick,
                 onActionButtonClick = onActionButtonClick,
                 actionButtonVisible = actionButtonVisible,
             )
         },
         content = { innerPadding ->
-
             NewPostContent(
                 modifier = modifier.padding(innerPadding),
                 contentState = contentState,
@@ -107,6 +146,8 @@ private fun NewPostScreen(
             )
         }
     )
+    
+    Loading(isLoading = newPostLoadingState.adLoading)
 }
 
 @Composable
@@ -170,7 +211,7 @@ private fun NewPostContent(
             DirectionContent(
                 modifier = modifier,
                 newPostState = newPostState,
-                newPostLoadingState= newPostLoadingState,
+                newPostLoadingState = newPostLoadingState,
                 onRouteSelect = newPostViewModel::getSelectedDirection,
                 onAddCityClick = { contentState.value = NewPostContentState.NewLocation },
             )
@@ -199,6 +240,16 @@ private fun NewPostContent(
                 location = newPostState.newLocation
             )
         }
+        NewPostContentState.DateTimePersonPrice -> {
+            DateTimePeronPriceContent(
+                modifier = modifier,
+                newPostState = newPostState,
+                setData = newPostViewModel::setDate,
+                setTime = newPostViewModel::setTime,
+                setPersonCount = newPostViewModel::setPersonCount,
+                setPrice = newPostViewModel::setPrice,
+            )
+        }
     }
 }
 
@@ -207,5 +258,6 @@ enum class NewPostContentState {
     From,
     To,
     NewLocation,
-    Direction
+    Direction,
+    DateTimePersonPrice,
 }

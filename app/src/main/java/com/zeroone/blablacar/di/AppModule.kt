@@ -107,6 +107,14 @@ object AppModule {
     fun provideAuthRepository(firebaseDatabase: FirebaseDatabase): AuthRepository {
         return AuthRepositoryImpl(firebaseDatabase.auth)
     }
+
+    @Provides
+    @Singleton
+    fun providePostRepository(firebaseDatabase: FirebaseDatabase): PostRepository {
+        return PostRepositoryImpl(firebaseDatabase.postCollection)
+    }
+
+
     @Provides
     @Singleton
     fun provideAuthUseCase(authRepository: AuthRepository): AuthUseCase {

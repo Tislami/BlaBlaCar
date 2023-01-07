@@ -9,6 +9,7 @@ class FirebaseDatabase {
     val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     val userCollection: CollectionReference = firestore.collection("users")
+    val postCollection: CollectionReference = firestore.collection("posts")
 
 
 

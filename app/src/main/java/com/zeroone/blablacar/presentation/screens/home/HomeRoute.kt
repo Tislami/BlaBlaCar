@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,8 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.zeroone.blablacar.R
-import com.zeroone.blablacar.domain.model.defaultPost
+import com.zeroone.blablacar.domain.model.Post2
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
 import com.zeroone.blablacar.presentation.ui.cards.PostCard
@@ -26,13 +28,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-    HomeScreen(modifier = modifier)
+    HomeScreen(
+        modifier = modifier,
+        postState = homeViewModel.postState.value
+    )
 }
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    postState: List<Post2>,
 ) {
 
     val listState: LazyListState = rememberLazyListState()
@@ -58,6 +65,7 @@ fun HomeScreen(
             HomeContent(
                 modifier = modifier.padding(it),
                 listState = listState,
+                postState=postState,
                 date = "Bugün",
                 personSize = 5,
                 dateOnClick = {},
@@ -72,6 +80,7 @@ fun HomeScreen(
 private fun HomeContent(
     modifier: Modifier = Modifier,
     listState: LazyListState,
+    postState: List<Post2>,
     date: String,
     personSize: Int,
     personSizeOnClick: () -> Unit,
@@ -97,9 +106,9 @@ private fun HomeContent(
             Spacer(modifier = Modifier.height(16.dp))
 
         }
-        items(15) {
+        items(postState) {post->
             PostCard(
-                post = defaultPost,
+                post = post,
                 onClick = {},
             )
             Spacer(Modifier.height(16.dp))
