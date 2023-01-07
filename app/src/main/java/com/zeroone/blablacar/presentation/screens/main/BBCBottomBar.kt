@@ -58,26 +58,26 @@ fun BBCBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    if (currentDestination?.route !=Routes.NewPost.route)
-    BottomNavigation(
-        backgroundColor = Color.Transparent,
-        elevation = 0.dp
-    ) {
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = { Icon(imageVector = item.icon, contentDescription = null) },
-                //label = { Text(stringResource(item.resourceId)) },
-                selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                selectedContentColor = MaterialTheme.colors.primary,
-                onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph
-                            .findStartDestination().id) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
+    if (currentDestination?.route !=Routes.NewPost.route) {
+        BottomNavigation(backgroundColor = MaterialTheme.colors.background) {
+            items.forEach { item ->
+                BottomNavigationItem(
+                    icon = { Icon(imageVector = item.icon, contentDescription = null) },
+                    //label = { Text(stringResource(item.resourceId)) },
+                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                    selectedContentColor = MaterialTheme.colors.primary,
+                    onClick = {
+                        navController.navigate(item.route) {
+                            popUpTo(
+                                navController.graph
+                                    .findStartDestination().id
+                            ) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

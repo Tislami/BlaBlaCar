@@ -23,33 +23,30 @@ internal fun HomeTopAppBar(
     showButton: Boolean,
     onClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(LocalDimensions.current.screenHorizontalPadding),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        BBCGreetingText(stringResource(id = R.string.search_for_a_trip))
-
-        AnimatedVisibility(
-            visible = showButton,
-            enter = slideInVertically(
-                animationSpec = tween(1000),
-                initialOffsetY = { 150 },
-            ),
-            exit = fadeOut() + slideOutVertically(targetOffsetY = { 150 })
-        ) {
-            Button(
-                onClick = onClick,
-                modifier = Modifier.height(50.dp),
-                shape = MaterialTheme.shapes.medium
+    TopAppBar(
+        backgroundColor = MaterialTheme.colors.background,
+        title = { BBCGreetingText(stringResource(id = R.string.search_for_a_trip)) },
+        actions = {
+            AnimatedVisibility(
+                visible = showButton,
+                enter = slideInVertically(
+                    animationSpec = tween(1000),
+                    initialOffsetY = { 150 },
+                ),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { 150 })
             ) {
-                Text(
-                    text = stringResource(id = R.string.search),
-                    color = MaterialTheme.colors.onPrimary,
-                    style = MaterialTheme.typography.button
-                )
+                Button(
+                    onClick = onClick,
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.search),
+                        color = MaterialTheme.colors.onPrimary,
+                        style = MaterialTheme.typography.button
+                    )
+                }
             }
         }
-    }
+    )
+
 }
