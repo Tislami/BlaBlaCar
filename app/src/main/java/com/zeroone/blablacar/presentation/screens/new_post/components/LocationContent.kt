@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.new_post.contents
+package com.zeroone.blablacar.presentation.screens.new_post.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -7,16 +7,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
-import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
 import com.zeroone.blablacar.presentation.ui.components.AutocompleteTextField
 
 
+
 @Composable
-fun LocationContent(
+fun LocationComponent(
     modifier: Modifier = Modifier,
     title: String,
     suggestions: List<String>,
@@ -24,7 +24,7 @@ fun LocationContent(
     textFieldLabelText: String,
     onTextFieldValueChange: (String) -> Unit,
     onTextFieldDone: (String) -> Unit,
-    newPostLoadingState: NewPostLoadingState,
+    isAutocompleteLoading: Boolean,
     onMapLongClick: (LatLng) -> Unit,
     location: LatLng?
 ) {
@@ -42,7 +42,7 @@ fun LocationContent(
             labelText = textFieldLabelText,
             suggestions = suggestions,
             onSuggestionSelect = onTextFieldValueChange,
-            isLoading = newPostLoadingState.autocompleteLoadingState,
+            isLoading = isAutocompleteLoading,
             onDone = onTextFieldDone,
         )
 

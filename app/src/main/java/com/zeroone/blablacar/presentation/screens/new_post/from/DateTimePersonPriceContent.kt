@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.new_post.contents
+package com.zeroone.blablacar.presentation.screens.new_post.components
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -16,11 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
-import com.zeroone.blablacar.presentation.ui.Loading
 import java.util.*
 
 @Composable
-fun DateTimePeronPriceContent(
+fun DateTimePersonPriceContent(
     modifier: Modifier = Modifier,
     newPostState: NewPostState,
     setData : (String)->Unit,
@@ -147,4 +146,3 @@ fun Card(content: @Composable () -> Unit) {
         content = content
     )
 }
-

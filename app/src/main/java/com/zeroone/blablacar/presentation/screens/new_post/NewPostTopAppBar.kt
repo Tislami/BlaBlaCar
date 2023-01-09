@@ -1,5 +1,6 @@
 package com.zeroone.blablacar.presentation.screens.new_post
 
+import android.util.Log
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,13 +10,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun NewPostTopAppBar(
-    newPostLoadingState: NewPostLoadingState,
     navigationIcon: ImageVector,
     actionButtonIcon: ImageVector,
     onNavigationClick: () -> Unit,
     onActionButtonClick: () -> Unit,
     actionButtonVisible: Boolean,
-) {
+    isLoading: Boolean,
+    ) {
     TopAppBar(
         backgroundColor = MaterialTheme.colors.background,
         elevation = 0.dp,
@@ -34,7 +35,7 @@ internal fun NewPostTopAppBar(
             }
         },
         actions = {
-            if (newPostLoadingState.locationLoadingState || newPostLoadingState.reverseLocationLoadingState) {
+            if (isLoading) {
                 CircularProgressIndicator()
             }
             if (actionButtonVisible) {

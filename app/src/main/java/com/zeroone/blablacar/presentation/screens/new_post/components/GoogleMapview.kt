@@ -1,15 +1,14 @@
-package com.zeroone.blablacar.presentation.screens.new_post.contents
+package com.zeroone.blablacar.presentation.screens.new_post.components
 
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.zeroone.blablacar.domain.model.google_map.direction.Route
-import com.zeroone.blablacar.presentation.screens.new_post.NewPostLoadingState
-import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 import com.zeroone.blablacar.utils.decodePoly
 
 
@@ -47,32 +46,27 @@ fun GoogleMapView(
     }
 }
 
+
 @Composable
 fun GoogleMapView(
-    newPostState: NewPostState,
+    origin: LatLng?,
+    destination: LatLng?,
+    waypoints: MutableMap<String, LatLng>,
+    routes: List<Route>?,
+    currentRoute: Route?,
     onPolyLineOnClick: (Route) -> Unit,
+    onInfoWindowClick: (String) -> Unit
 ) {
-    if (newPostState.direction != null && newPostState.fromLocation != null && newPostState.toLocation != null) {
-
+    if (origin != null && destination != null) {
         val cameraPositionState =
             rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(newPostState.fromLocation, 6f)
+                position = CameraPosition.fromLatLngZoom(origin, 6f)
             }
         val mapProperties by remember { mutableStateOf(MapProperties(mapType = MapType.NORMAL)) }
         val uiSettings by remember { mutableStateOf(MapUiSettings(compassEnabled = false)) }
 
-        val fromMarkerState = rememberMarkerState(
-            position = LatLng(
-                newPostState.fromLocation.latitude,
-                newPostState.fromLocation.longitude
-            )
-        )
-        val toMarkerState = rememberMarkerState(
-            position = LatLng(
-                newPostState.toLocation.latitude,
-                newPostState.toLocation.longitude
-            )
-        )
+        val fromMarkerState = rememberMarkerState(position = origin)
+        val toMarkerState = rememberMarkerState(position = destination)
         GoogleMap(
             modifier = Modifier,
             cameraPositionState = cameraPositionState,
@@ -82,24 +76,20 @@ fun GoogleMapView(
             Marker(state = fromMarkerState)
             Marker(state = toMarkerState)
 
-            newPostState.waypoints.values.onEach { location ->
-                if (location != null) {
-                    val markerState = rememberMarkerState(
-                        position = location
-                    )
-                    Marker(
-                        state = markerState,
-                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
-                    )
-                }
+            waypoints.onEach {location->
+                val markerState = rememberMarkerState(position = location.value)
+                Marker(
+                    state = markerState,
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE),
+                )
             }
 
-            newPostState.direction.routes.onEach { route ->
+            routes?.onEach { route ->
                 Polyline(
-                    color = if (route == newPostState.currentRoute) MaterialTheme.colors.primary else Color.Gray,
+                    color = if (route == currentRoute) MaterialTheme.colors.primary else Color.Gray,
                     points = decodePoly(route.overview_polyline.points),
                     width = 15f,
-                    zIndex = if (route == newPostState.currentRoute) 11.0f else 10.0f,
+                    zIndex = if (route == currentRoute) 11.0f else 10.0f,
                     clickable = true,
                     onClick = { onPolyLineOnClick(route) }
                 )

@@ -13,7 +13,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
 import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPostRoute
 import com.zeroone.blablacar.presentation.screens.home.HomeRoute
-import com.zeroone.blablacar.presentation.screens.new_post.NewPostRoute
+import com.zeroone.blablacar.presentation.screens.new_post.navigation.newPostNavigation
 import com.zeroone.blablacar.presentation.screens.user.profile.ProfileRoute
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
@@ -46,7 +46,7 @@ private fun NavHostController(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Routes.ExpandedPost.route,
+        startDestination = Routes.Home.route,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
@@ -55,22 +55,16 @@ private fun NavHostController(
 
         authNavigation(modifier,navController)
 
+        newPostNavigation(modifier, navController)
+
         composable(Routes.Home.route) {
             HomeRoute(
                 modifier = modifier,
             )
         }
-
-        composable(Routes.NewPost.route) {
-            NewPostRoute(
-                modifier = modifier,
-                navController= navController,
-            )
-        }
-        composable(Routes.NewPost.route) {
-            NewPostRoute(
-                modifier = modifier,
-                navController= navController,
+        composable(route = Routes.Profile.route) {
+            ProfileRoute(
+                modifier = modifier
             )
         }
 
@@ -83,5 +77,6 @@ private fun NavHostController(
 object Graph {
     const val AUTHENTICATION = "AUTH"
     const val PROFILE = "PROFILE"
+    const val NEW_POST = "NEWPOST"
 }
 

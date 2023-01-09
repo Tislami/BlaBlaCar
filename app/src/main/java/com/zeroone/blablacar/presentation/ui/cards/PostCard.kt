@@ -59,7 +59,8 @@ private fun Title(dateTime: String, price: Float) {
         Text(
             text = dateTime,
             style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.primary
+            color = MaterialTheme.colors.primary,
+            modifier = Modifier.weight(1f)
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -67,7 +68,7 @@ private fun Title(dateTime: String, price: Float) {
             Icon(
                 painter = painterResource(id = R.drawable.manat),
                 contentDescription = null,
-                modifier = Modifier.size(20.dp)
+                modifier = Modifier.size(25.dp)
             )
 
             Spacer(modifier = Modifier.width(4.dp))

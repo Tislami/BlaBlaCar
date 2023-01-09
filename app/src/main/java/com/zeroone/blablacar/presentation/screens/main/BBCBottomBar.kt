@@ -14,6 +14,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.zeroone.blablacar.R
+import com.zeroone.blablacar.presentation.screens.new_post.navigation.NewPostRoutes
 import javax.annotation.concurrent.Immutable
 
 
@@ -58,9 +59,8 @@ fun BBCBottomBar(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    if (currentDestination?.route !=Routes.NewPost.route &&
-        currentDestination?.route !=Routes.ExpandedPost.route
-    ) {
+
+    if (currentDestination?.parent?.route != Graph.NEW_POST ) {
         BottomNavigation(backgroundColor = MaterialTheme.colors.background) {
             items.forEach { item ->
                 BottomNavigationItem(
