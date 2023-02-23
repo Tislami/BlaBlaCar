@@ -1,6 +1,7 @@
 package com.zeroone.blablacar.presentation.ui.cards
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,12 +22,15 @@ import coil.compose.AsyncImage
 import com.zeroone.blablacar.domain.model.Post2
 import com.zeroone.blablacar.domain.model.User
 import com.zeroone.blablacar.domain.model.defaultUser
+import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPost
+import com.zeroone.blablacar.presentation.ui.CardShimmerLoading
+import com.zeroone.blablacar.presentation.ui.shimmerEffect
 import com.zeroone.blablacar.presentation.ui.theme.LocalDimensions
 
 @Composable
 fun PostCard(
     post: Post2,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -37,7 +41,11 @@ fun PostCard(
         elevation = 8.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Title("${post.date} , ${post.time}", post.price)
+            Title(
+                date = post.date,
+                time = post.time,
+                price = post.price
+            )
             Spacer(modifier = Modifier.height(16.dp))
             LocationField(post.fromAddress)
             LocationField(post.toAddress)
@@ -49,19 +57,32 @@ fun PostCard(
 }
 
 @Composable
-private fun Title(dateTime: String, price: Float) {
+private fun Title(
+    date: String,
+    time: String,
+    price: Float
+) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = dateTime,
-            style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.primary,
-            modifier = Modifier.weight(1f)
-        )
+        Column() {
+            Text(
+                text = date,
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.primary,
+
+                )
+            Text(
+                text = time,
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.primary,
+
+                )
+        }
+
 
         Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -89,9 +110,10 @@ private fun LocationField(locationName: String) {
     ) {
 
         Icon(
-            painter = painterResource(id = R.drawable.location_icon_24),
+            painter = painterResource(id = R.drawable.location_icon),
             contentDescription = null,
-            tint = MaterialTheme.colors.onBackground
+            tint = MaterialTheme.colors.onBackground,
+            modifier = Modifier.size(25.dp)
         )
 
         Text(
@@ -114,11 +136,8 @@ private fun UserField(user: User) {
                 .border(BorderStroke(1.dp, MaterialTheme.colors.onBackground), CircleShape)
         ) {
 
-            AsyncImage(
-                model = user.photoUrl,
-                contentDescription = stringResource(id = R.string.profile_photo),
-                contentScale = ContentScale.Crop,
-            )
+            Image(imageVector = Icons.Default.Person, contentDescription = null)
+
         }
 
         Spacer(modifier = Modifier.width(16.dp))

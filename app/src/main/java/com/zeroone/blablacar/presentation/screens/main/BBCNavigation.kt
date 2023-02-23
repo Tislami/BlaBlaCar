@@ -11,7 +11,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.zeroone.blablacar.presentation.screens.auth.navigation.authNavigation
-import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPostRoute
+import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPost
 import com.zeroone.blablacar.presentation.screens.home.HomeRoute
 import com.zeroone.blablacar.presentation.screens.new_post.navigation.newPostNavigation
 import com.zeroone.blablacar.presentation.screens.user.profile.ProfileRoute
@@ -66,10 +66,6 @@ private fun NavHostController(
             ProfileRoute(
                 modifier = modifier
             )
-        }
-
-        composable(Routes.ExpandedPost.route) {
-           ExpandedPostRoute(modifier = modifier)
         }
     }
 }

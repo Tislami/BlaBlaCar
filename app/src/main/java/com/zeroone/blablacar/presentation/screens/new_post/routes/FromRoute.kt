@@ -1,11 +1,11 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.model.LatLng
 import com.zeroone.blablacar.R
+import com.zeroone.blablacar.presentation.screens.main.Routes
 import com.zeroone.blablacar.presentation.screens.new_post.*
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostTopAppBar
 import com.zeroone.blablacar.presentation.screens.new_post.components.LocationComponent
@@ -22,7 +23,7 @@ import com.zeroone.blablacar.presentation.screens.new_post.navigation.NewPostRou
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun ToRoute(
+fun FromRoute(
     modifier: Modifier = Modifier,
     navController: NavController,
     newPostViewModel: NewPostViewModel,
@@ -33,9 +34,9 @@ fun ToRoute(
     val mapLoadingState = googleMapsApiViewModel.mapLoadingState.value
     val postState = newPostViewModel.newPostState.value
 
-    LaunchedEffect(key1 = mapState){
-        googleMapsApiViewModel.eventFlow.collectLatest { event->
-            when(event){
+    LaunchedEffect(key1 = googleMapsApiViewModel) {
+        googleMapsApiViewModel.eventFlow.collectLatest { event ->
+            when (event) {
                 is GoogleMapsApiViewModel.GoogleMapsApiUiEvent.Error -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
@@ -43,31 +44,29 @@ fun ToRoute(
         }
     }
 
-    ToScreen(
+    FromScreen(
         modifier = modifier,
         scaffoldState = scaffoldState,
         postState = postState,
         mapState = mapState,
         mapLoadingState = mapLoadingState,
-        onNavigationClick = { navController.popBackStack() },
+        onNavigationClick = { navController.popBackStack(Routes.Home.route,false)},
         onActionClick = {
-            newPostViewModel.setToLocation(locationState = mapState.currentLocation)
-            navController.navigate(NewPostRoutes.Direction.route)
+            navController.navigate(NewPostRoutes.To.route)
+            newPostViewModel.setFromLocation(locationState = mapState.currentLocation)
         },
         textFieldValueChange = {
             googleMapsApiViewModel.autocomplete(it)
-            newPostViewModel.setToLocationText(it)
+            newPostViewModel.setFromLocationText(it)
         },
-        textFieldDone = {
-            googleMapsApiViewModel.getLocation(mapState.suggestions[it])
-        },
+        textFieldDone = { googleMapsApiViewModel.getLocation(mapState.suggestions[it]) },
         onMapLongClick = googleMapsApiViewModel::getReverseLocation,
     )
 }
 
 
 @Composable
-private fun ToScreen(
+private fun FromScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState,
     postState: NewPostState,
@@ -79,12 +78,11 @@ private fun ToScreen(
     textFieldDone: (String) -> Unit,
     onMapLongClick: (LatLng) -> Unit,
 ) {
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             NewPostTopAppBar(
-                navigationIcon = Icons.Default.ArrowBack,
+                navigationIcon = Icons.Default.Close,
                 actionButtonIcon = Icons.Default.ArrowForward,
                 onNavigationClick = onNavigationClick,
                 onActionButtonClick = onActionClick,
@@ -95,10 +93,10 @@ private fun ToScreen(
         content = { padding ->
             LocationComponent(
                 modifier = modifier.padding(padding),
-                title = stringResource(id = R.string.where_are_you_going_to),
+                title = stringResource(id = R.string.where_will_you_pick_up_passengers),
                 suggestions = mapState.suggestions.map { it.key },
-                textFieldValue = postState.toLocation.text,
-                textFieldLabelText = stringResource(id = R.string.to),
+                textFieldValue = postState.fromLocation.text,
+                textFieldLabelText = stringResource(id = R.string.from),
                 onTextFieldValueChange = textFieldValueChange,
                 onTextFieldDone = textFieldDone,
                 isAutocompleteLoading = mapLoadingState.autocomplete,

@@ -1,11 +1,11 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,7 +22,7 @@ import com.zeroone.blablacar.presentation.screens.new_post.navigation.NewPostRou
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun FromRoute(
+fun ToRoute(
     modifier: Modifier = Modifier,
     navController: NavController,
     newPostViewModel: NewPostViewModel,
@@ -33,9 +33,9 @@ fun FromRoute(
     val mapLoadingState = googleMapsApiViewModel.mapLoadingState.value
     val postState = newPostViewModel.newPostState.value
 
-    LaunchedEffect(key1 = googleMapsApiViewModel) {
-        googleMapsApiViewModel.eventFlow.collectLatest { event ->
-            when (event) {
+    LaunchedEffect(key1 = mapState){
+        googleMapsApiViewModel.eventFlow.collectLatest { event->
+            when(event){
                 is GoogleMapsApiViewModel.GoogleMapsApiUiEvent.Error -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
@@ -43,29 +43,31 @@ fun FromRoute(
         }
     }
 
-    FromScreen(
+    ToScreen(
         modifier = modifier,
         scaffoldState = scaffoldState,
         postState = postState,
         mapState = mapState,
         mapLoadingState = mapLoadingState,
-        onNavigationClick = { navController.popBackStack() },
+        onNavigationClick = { navController.navigate(NewPostRoutes.From.route) },
         onActionClick = {
-            navController.navigate(NewPostRoutes.To.route)
-            newPostViewModel.setFromLocation(locationState = mapState.currentLocation)
+            newPostViewModel.setToLocation(locationState = mapState.currentLocation)
+            navController.navigate(NewPostRoutes.Direction.route)
         },
         textFieldValueChange = {
             googleMapsApiViewModel.autocomplete(it)
-            newPostViewModel.setFromLocationText(it)
+            newPostViewModel.setToLocationText(it)
         },
-        textFieldDone = { googleMapsApiViewModel.getLocation(mapState.suggestions[it]) },
+        textFieldDone = {
+            googleMapsApiViewModel.getLocation(mapState.suggestions[it])
+        },
         onMapLongClick = googleMapsApiViewModel::getReverseLocation,
     )
 }
 
 
 @Composable
-private fun FromScreen(
+private fun ToScreen(
     modifier: Modifier = Modifier,
     scaffoldState: ScaffoldState,
     postState: NewPostState,
@@ -77,11 +79,12 @@ private fun FromScreen(
     textFieldDone: (String) -> Unit,
     onMapLongClick: (LatLng) -> Unit,
 ) {
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             NewPostTopAppBar(
-                navigationIcon = Icons.Default.Close,
+                navigationIcon = Icons.Default.ArrowBack,
                 actionButtonIcon = Icons.Default.ArrowForward,
                 onNavigationClick = onNavigationClick,
                 onActionButtonClick = onActionClick,
@@ -92,10 +95,10 @@ private fun FromScreen(
         content = { padding ->
             LocationComponent(
                 modifier = modifier.padding(padding),
-                title = stringResource(id = R.string.where_are_you_going_from),
+                title = stringResource(id = R.string.where_will_you_go),
                 suggestions = mapState.suggestions.map { it.key },
-                textFieldValue = postState.fromLocation.text,
-                textFieldLabelText = stringResource(id = R.string.from),
+                textFieldValue = postState.toLocation.text,
+                textFieldLabelText = stringResource(id = R.string.to),
                 onTextFieldValueChange = textFieldValueChange,
                 onTextFieldDone = textFieldDone,
                 isAutocompleteLoading = mapLoadingState.autocomplete,

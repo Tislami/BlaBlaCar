@@ -1,11 +1,8 @@
 package com.zeroone.blablacar.presentation.screens.new_post.navigation
 
 import android.util.Log
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,9 +11,8 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.zeroone.blablacar.presentation.screens.main.Graph
-import com.zeroone.blablacar.presentation.screens.main.Routes
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostViewModel
-import com.zeroone.blablacar.presentation.screens.new_post.from.*
+import com.zeroone.blablacar.presentation.screens.new_post.routes.*
 import javax.annotation.concurrent.Immutable
 
 
@@ -28,31 +24,40 @@ fun NavGraphBuilder.newPostNavigation(
     navigation(
         route = Graph.NEW_POST,
         startDestination = NewPostRoutes.From.route,
+        exitTransition = {
+            slideOutVertically(
+                animationSpec = tween(1000),
+                targetOffsetY = { -2000 }
+            )
+        }
     ) {
-
         composable(
             route = NewPostRoutes.From.route,
             enterTransition = {
-                Log.d("NewPostTag", "newPostNavigation: ${navController.previousBackStackEntry?.destination?.route}")
-                if (navController.previousBackStackEntry?.destination?.route == Routes.Home.route){
+                if (navController.previousBackStackEntry?.destination?.route == NewPostRoutes.To.route) {
+                    slideInHorizontally(
+                        animationSpec = tween(1000),
+                        initialOffsetX = { 2000 }
+                    )
+                } else {
                     slideInVertically(
                         animationSpec = tween(1000),
                         initialOffsetY = { 2000 }
                     )
                 }
-                else{
-                    slideInHorizontally(
-                        animationSpec = tween(1000),
-                        initialOffsetX = { 2000 }
-                    )
-                }
-
             },
             exitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(1000),
-                    targetOffsetX = { -2000 }
-                )
+                if (navController.currentBackStackEntry?.destination?.route == NewPostRoutes.To.route) {
+                    slideOutHorizontally(
+                        animationSpec = tween(1000),
+                        targetOffsetX = { 2000 }
+                    )
+                } else {
+                    slideOutVertically(
+                        animationSpec = tween(1000),
+                        targetOffsetY = { -2000 }
+                    )
+                }
             }
         ) { backStackEntry ->
             val parentEntry =
@@ -70,14 +75,24 @@ fun NavGraphBuilder.newPostNavigation(
             enterTransition = {
                 slideInHorizontally(
                     animationSpec = tween(1000),
-                    initialOffsetX = { 2000 }
+                    initialOffsetX = {
+                        if (navController.previousBackStackEntry?.destination?.route == NewPostRoutes.From.route)
+                            -2000 else { 2000 }
+                    }
                 )
             },
             exitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(1000),
-                    targetOffsetX = { -2000 }
-                )
+                if (navController.currentBackStackEntry?.destination?.route == NewPostRoutes.From.route) {
+                    slideOutHorizontally(
+                        animationSpec = tween(1000),
+                        targetOffsetX = { -2000 }
+                    )
+                } else {
+                    slideOutHorizontally(
+                        animationSpec = tween(1000),
+                        targetOffsetX = { 2000 }
+                    )
+                }
             }
         ) { backStackEntry ->
             val parentEntry =
@@ -95,14 +110,24 @@ fun NavGraphBuilder.newPostNavigation(
             enterTransition = {
                 slideInHorizontally(
                     animationSpec = tween(1000),
-                    initialOffsetX = { 2000 }
+                    initialOffsetX = {
+                        if (navController.previousBackStackEntry?.destination?.route == NewPostRoutes.To.route)
+                            -2000 else { 2000 }
+                    }
                 )
             },
             exitTransition = {
-                slideOutHorizontally(
-                    animationSpec = tween(1000),
-                    targetOffsetX = { -2000 }
-                )
+                if (navController.currentBackStackEntry?.destination?.route == NewPostRoutes.To.route) {
+                    slideOutHorizontally(
+                        animationSpec = tween(1000),
+                        targetOffsetX = { -2000 }
+                    )
+                } else {
+                    slideOutHorizontally(
+                        animationSpec = tween(1000),
+                        targetOffsetX = { 2000 }
+                    )
+                }
             }
         ) { backStackEntry ->
             val parentEntry =
@@ -120,7 +145,10 @@ fun NavGraphBuilder.newPostNavigation(
             enterTransition = {
                 slideInHorizontally(
                     animationSpec = tween(1000),
-                    initialOffsetX = { 2000 }
+                    initialOffsetX = {
+                        if (navController.previousBackStackEntry?.destination?.route == NewPostRoutes.Direction.route)
+                            -2000 else { 2000 }
+                    }
                 )
             },
             exitTransition = {
@@ -145,7 +173,10 @@ fun NavGraphBuilder.newPostNavigation(
             enterTransition = {
                 slideInHorizontally(
                     animationSpec = tween(1000),
-                    initialOffsetX = { 2000 }
+                    initialOffsetX = {
+                        if (navController.previousBackStackEntry?.destination?.route == NewPostRoutes.PersonCount.route)
+                            -2000 else { 2000 }
+                    }
                 )
             },
             exitTransition = {

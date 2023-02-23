@@ -1,25 +1,13 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.zeroone.blablacar.R
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostTopAppBar
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostViewModel

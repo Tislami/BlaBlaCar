@@ -17,6 +17,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val postState = mutableStateOf<List<Post2>>(emptyList())
+    val isLoading = mutableStateOf(true)
 
     init {
         getAllPost()

@@ -1,5 +1,6 @@
 package com.zeroone.blablacar.presentation.screens.home
 
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,11 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zeroone.blablacar.R
 import com.zeroone.blablacar.domain.model.Post2
-import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPostRoute
+import com.zeroone.blablacar.presentation.screens.expanded_post.ExpandedPost
 import com.zeroone.blablacar.presentation.screens.home.components.HomeSelectionButton
 import com.zeroone.blablacar.presentation.screens.home.components.HomeTopAppBar
 import com.zeroone.blablacar.presentation.ui.cards.PostCard
 import com.zeroone.blablacar.presentation.ui.components.BBCTextField
+import com.zeroone.blablacar.presentation.ui.shimmerEffect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -46,10 +48,11 @@ fun HomeScreen(
     val listState: LazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    val showButton by remember {
-        derivedStateOf { listState.firstVisibleItemIndex > 0 }
-    }
+    val showButton by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 
+    val visibleState = remember { MutableTransitionState(false) }
+    var isExpanded by remember { mutableStateOf(false) }
+    val post = remember { mutableStateOf(Post2()) }
 
     Scaffold(
         topBar = {
@@ -66,15 +69,32 @@ fun HomeScreen(
             HomeContent(
                 modifier = modifier.padding(it),
                 listState = listState,
-                postState=postState,
+                postState = postState,
                 date = "Bugün",
                 personSize = 5,
                 dateOnClick = {},
                 personSizeOnClick = {},
-                searchOnClick = {}
+                searchOnClick = {},
+                postItemOnClick = { postItem->
+                    post.value = postItem
+                    visibleState.targetState = !visibleState.targetState },
+                isLoading = true,
             )
         },
     )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        ExpandedPost(
+            post = post.value,
+            visibleState = visibleState) {
+            visibleState.targetState = !visibleState.targetState
+        }
+    }
+
 }
 
 @Composable
@@ -87,6 +107,8 @@ private fun HomeContent(
     personSizeOnClick: () -> Unit,
     dateOnClick: () -> Unit,
     searchOnClick: () -> Unit,
+    postItemOnClick: (Post2) -> Unit,
+    isLoading: Boolean,
 ) {
     LazyColumn(
         modifier = modifier
@@ -101,16 +123,19 @@ private fun HomeContent(
                 dateOnClick,
                 personSize,
                 personSizeOnClick,
-                searchOnClick
+                searchOnClick,
+                isLoading
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
         }
-        items(postState) {post->
+        items(postState) { post ->
             PostCard(
                 post = post,
-                onClick = {},
+                onClick = {
+                    postItemOnClick(post)
+                }
             )
             Spacer(Modifier.height(16.dp))
         }
@@ -123,9 +148,10 @@ private fun Head(
     dateOnClick: () -> Unit,
     personCount: Int,
     personCountOnClick: () -> Unit,
-    searchOnClick: () -> Unit
+    searchOnClick: () -> Unit,
+    isLoading : Boolean,
 ) {
-    BBCTextField(value = "", onValueChange = {}, labelText = stringResource(id = R.string.from))
+    BBCTextField(value = "Sheki", onValueChange = {}, labelText = stringResource(id = R.string.from))
     BBCTextField(value = "", onValueChange = {}, labelText = stringResource(id = R.string.to))
 
     Row(

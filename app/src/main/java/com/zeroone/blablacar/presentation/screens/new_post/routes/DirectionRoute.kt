@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,7 +62,7 @@ fun DirectionRoute(
         postState = postState,
         mapState = mapState,
         mapsLoadingState = mapLoadingState,
-        onNavigationClick = { navController.popBackStack() },
+        onNavigationClick = { navController.navigate(NewPostRoutes.To.route) },
         onActionClick = { navController.navigate(NewPostRoutes.DateTime.route) },
         onRouteSelect = newPostViewModel::setCurrentRoute,
         onAddCityClick = { navController.navigate(NewPostRoutes.AddLocation.route) },

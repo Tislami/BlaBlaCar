@@ -1,9 +1,7 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
 import android.app.TimePickerDialog
-import android.util.Log
 import android.widget.TimePicker
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,17 +16,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.himanshoe.kalendar.Kalendar
 import com.himanshoe.kalendar.color.KalendarThemeColor
 import com.himanshoe.kalendar.component.day.config.KalendarDayColors
-import com.himanshoe.kalendar.model.KalendarType
 import com.himanshoe.kalendar.ui.firey.KalendarFirey
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostState
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostTopAppBar
 import com.zeroone.blablacar.presentation.screens.new_post.NewPostViewModel
 import com.zeroone.blablacar.presentation.screens.new_post.navigation.NewPostRoutes
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import java.util.*

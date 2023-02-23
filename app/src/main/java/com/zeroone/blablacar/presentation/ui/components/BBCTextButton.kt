@@ -20,6 +20,6 @@ fun BBCTextButton(
     TextButton(
         modifier=modifier,
         onClick = onClick) {
-
+        Text(text = text)
     }
 }

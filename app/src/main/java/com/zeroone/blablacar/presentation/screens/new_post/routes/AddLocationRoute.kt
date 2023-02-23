@@ -1,4 +1,4 @@
-package com.zeroone.blablacar.presentation.screens.new_post.from
+package com.zeroone.blablacar.presentation.screens.new_post.routes
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
